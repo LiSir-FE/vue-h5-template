@@ -765,7 +765,7 @@ npm run build
 
 ```javascript
 const defaultSettings = require('./src/config/index.js')
-const name = defaultSettings.title || 'vue mobile template'
+const name = defaultSettings.title || '运联十周年庆'
 const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV)
 
 // externals

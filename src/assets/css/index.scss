@@ -58,3 +58,6 @@ html, body, #app {
   height: 260px;
   overflow: scroll;
 }
+.van-overlay{
+  z-index: 999;
+}

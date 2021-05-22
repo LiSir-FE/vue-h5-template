@@ -11,8 +11,14 @@ import store from './store'
 import { loginService } from '@/service/loginService'
 // 设置 js中可以访问 $cdn
 import { $cdn } from '@/config'
+import globalVue from '@/utils/global'
+import answerList from '@/utils/json'
+import vueWechatTitle from 'vue-wechat-title'
 import { GetParam } from './utils/getParam.js'
 Vue.prototype.$cdn = $cdn
+Vue.prototype.global = globalVue
+Vue.prototype.answerList = answerList
+Vue.use(vueWechatTitle)
 // 全局引入按需引入UI库 vant
 import '@/plugins/vant'
 // 引入全局样式
@@ -23,13 +29,12 @@ import 'lib-flexible/flexible.js'
 // filters
 import './filters'
 Vue.config.productionTip = false
-
 router.beforeEach((to, from, next) => {
   if (to.path === '/error') {
     next()
     return
   }
-  const token = store.state.app.userName
+  const token = globalVue.userInfo.unionid
   // const token = store.state.user.token
   const appid = 'wx1fb04de739afd114' // wx1fb04de739afd114实际公众号appid，这里的appid对应的微信应用一定是绑定当前h5项目所在线上域名，也就是需要在微信开放平台绑定js安全域名
   const redirect_uri = encodeURIComponent(
@@ -43,18 +48,14 @@ router.beforeEach((to, from, next) => {
       window.location.href = url
     } else {
       code = GetParam(window.location.href, 'code')
-      // const state = GetParam(window.location.href, 'state')
-      // const states = state.slice(0, 1)
-      // const data = { code }
       // 这里则是根据授权登录后回调到当前h5地址，从当前地址导航栏拿取code,根据实际开发的应用场景，比如向我们项目则是调用一个有后台提供的获取微信个人信息的接口，这个接口是后台根据拿取到的code去请求微信官方文档获取个人信息的接口，下面是我根据我实际业务场景编写的，主要是根据code获取个人信息保存。授权登录走到这一步基本就做完了
       loginService.getWXByCode({ code: code }).then(res => {
         if (res.data.success) {
-          console.log(res, res.data)
-          // window.location.href = res.data.datas
-          // next()
+          globalVue.userInfo = res.data.datas
+          console.log('globalVue.userInfo', globalVue.userInfo)
+          next()
         } else {
-          console.log('123123', res)
-          // window.location.href = url // 如果请求失败继续走重定 向去获取code这一步
+          window.location.href = url // 如果请求失败继续走重定 向去获取code这一步
         }
       })
       // next();

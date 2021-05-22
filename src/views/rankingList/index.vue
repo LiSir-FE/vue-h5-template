@@ -22,50 +22,70 @@
     </div>
 
     <div class="buttonMin">
-      <div class="buttonMinLeft">
+      <div class="buttonMinLeft" @click="share">
         <van-image :src="buttonLft" />
       </div>
-      <div class="buttonMinRight">
+      <div class="buttonMinRight" @click="again">
         <van-image :src="buttonRight" />
       </div>
     </div>
 
     <div class="listBtn">
-      <van-tabs v-model="active">
+      <van-tabs v-model="active" @change="activeChange">
         <van-tab title="排行榜">
           <div class="listAllTop">
-            <p v-for="item in listTop">{{ item.value }}</p>
+            <p v-for="item in listTop" :key="item.value">{{ item.value }}</p>
           </div>
           <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-            <van-cell v-for="item in allList" :key="item" :title="item" />
+            <div v-for="(item, index) in allList" :key="index" class="wanListP">
+              <p>{{ index + 1 }}</p>
+              <p><van-image round width="1rem" :src="item.headImg" /></p>
+              <p>{{ item. nickName }}</p>
+              <p>{{ item. score }}</p>
+              <p>{{ item. useTime }}</p>
+            </div>
           </van-list>
         </van-tab>
         <van-tab title="我的战绩">
           <div class="listAllTop">
-            <p v-for="item in listTop2">{{ item.value }}</p>
+            <p v-for="item in listTop2" :key="item.value">{{ item.value }}</p>
           </div>
           <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-            <van-cell v-for="item in allList" :key="item" :title="item" />
+            <div v-for="(item, index) in allList" :key="index" class="wanListP">
+              <p>{{ (item.createTime) | formatDates }}</p>
+              <p>{{ item. score }}</p>
+              <p>{{ item. useTime }}</p>
+            </div>
           </van-list>
         </van-tab>
       </van-tabs>
     </div>
 
+    <van-overlay :show="show" @click="show = false">
+      <div class="container">
+        <van-image :src="shares" class="sharImg"/>
+        <p>分享至朋友圈,<br>可额外获得1次答题机会!</p>
+      </div>
+    </van-overlay>
   </div>
 </template>
 
 <script>
-
+import { loginService } from '@/service/loginService'
+import globalVue from '@/utils/global'
+import { Dialog } from 'vant'
 export default {
 
   data() {
     return {
+      show: globalVue.show,
       logos: require('../../assets/img/logos.png'),
+      shares: require('../../assets/img/share.png'),
       main: require('../../assets/img/main.png'),
       border: require('../../assets/img/border.png'),
       buttonLft: require('../../assets/img/addChance.png'),
       buttonRight: require('../../assets/img/again.png'),
-      active: 1,
+      active: 0,
       allList: [],
       loading: false,
       finished: false,
@@ -92,10 +112,42 @@ export default {
     }
   },
 
-  computed: {},
+  computed: {
+  },
+
+  filters: {
+    formatDates: function (value) {
+      let date = new Date(Number(value));
+      let y = date.getFullYear();
+      let MM = date.getMonth() + 1;
+      MM = MM < 10 ? ('0' + MM) : MM;
+      let d = date.getDate();
+      d = d < 10 ? ('0' + d) : d;
+      // let h = date.getHours();
+      // h = h < 10 ? ('0' + h) : h;
+      // let m = date.getMinutes();
+      // m = m < 10 ? ('0' + m) : m;
+      // let s = date.getSeconds();
+      // s = s < 10 ? ('0' + s) : s;
+      // return y + '-' + MM + '-' + d + ' ' + h + ':' + m + ':' + s;
+      return y + '-' + MM + '-' + d + ' ';
+    }
+  },
 
   mounted() {
     this.onLoad()
+    const share = {
+      hasGet: true,
+      title: '123123123',
+      desc: '12312312312',
+      img: require('../../assets/img/logos.png')
+    }
+    const params = {
+      type: 20, typeId: globalVue.userInfo.unionid
+    }
+    loginService.getWxJssdk().then(res => {
+      loginService.getWxShare(share, '123123', true, params)
+    })
   },
 
   methods: {
@@ -103,23 +155,97 @@ export default {
       // 异步更新数据
       // setTimeout 仅做示例，真实场景中一般为 ajax 请求
       setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          this.allList.push(this.allList.length + 1)
-        }
-
+        this.getAnswerGameAllUserRanking()
         // 加载状态结束
         this.loading = false
 
         // 数据全部加载完成
-        if (this.allList.length >= 40) {
+        if (this.allList.length >= this.allList.length) {
           this.finished = true
         }
-      }, 1000)
+      }, 200)
+    },
+    activeChange(item) {
+      if (item == 0) {
+        this.getAnswerGameAllUserRanking()
+      } else {
+        this.getAnswerGameUserRanking()
+      }
+    },
+    // 查询全部排名
+    getAnswerGameAllUserRanking() {
+      loginService.getAnswerGameAllUserRanking().then(res => {
+        console.log('全部', res)
+        this.allList = res.data.datas
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    // 查询我的排名
+    getAnswerGameUserRanking() {
+      loginService.getAnswerGameUserRanking().then(res => {
+        console.log('我的', res)
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    share() {
+      this.show = true
+    },
+    again() {
+      loginService.getAnswerGameCheckCount({ userId: globalVue.userInfo.unionid }).then(res => {
+        if (globalVue.answerNums >= res.data.datas) {
+          this.$router.push({ name: 'Answer' })
+        } else {
+          Dialog.confirm({
+            message: '答题次数已用完,分享即可获得答题次数!'
+          }).then(() => {
+            this.show = true
+          }).catch((err) => {
+            console.log(err)
+          })
+        }
+      }).catch(err => {
+        console.log(err)
+      })
     }
   }
 }
 </script>
 <style lang="scss" scoped>
+.container{
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  p{
+    font-size: 24px;
+    color: #03f9fc;
+    line-height: 40px;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+  }
+}
+.sharImg {
+  position: absolute;
+  transform: rotate(-20deg);
+  top: 5px;
+  right: 10px;
+  width: 150px;
+}
+.wanListP{
+  display: flex;
+  width: 100%;
+  p{
+    flex: 1;
+    text-align: center;
+    color: #1064c2;
+  }
+}
 .warpper {
   width: 100%;
   height: 100%;
