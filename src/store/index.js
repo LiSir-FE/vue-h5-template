@@ -10,7 +10,7 @@ const store = new Vuex.Store({
   },
   state: {
     isShow: false,
-    answerNums: '11111'
+    answerNums: '1'
   },
   mutations: {
     setToken(state, token) {

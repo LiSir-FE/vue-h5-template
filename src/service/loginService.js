@@ -176,6 +176,7 @@ export const loginService = {
             typeId: parms.typeId
           }).then(res => {
             globalVue.answerNums++
+            store.state.answerNums++
             store.state.isShow = false
             console.log(store.state.isShow, 'store.state.isShow', globalVue.answerNums, res)
           }).catch(err => {

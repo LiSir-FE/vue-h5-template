@@ -199,7 +199,7 @@ export default {
     },
     again() {
       loginService.getAnswerGameCheckCount({ userId: globalVue.userInfo.unionid }).then(res => {
-        if (globalVue.answerNums >= res.data.datas) {
+        if (Number(that.$store.state.answerNums) >= Number(res.data.datas)) {
           this.$router.push({ name: 'Answer' })
         } else {
           Dialog.confirm({

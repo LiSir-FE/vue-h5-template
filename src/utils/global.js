@@ -1,4 +1,4 @@
 const userInfo = {}
-const answerNums = '111111'
+const answerNums = '1'
 const show = false
 export default { userInfo, answerNums, show }
