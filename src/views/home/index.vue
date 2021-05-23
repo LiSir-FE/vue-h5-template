@@ -55,8 +55,9 @@ export default {
       img: require('../../assets/img/logos.png')
     }
     const params = {
-      type: 20, typeId: globalVue.userInfo.unionid
+      type: 20, typeId: store.getters.getToken
     }
+    console.log('paramsparamsparamsparams', params, store)
     setTimeout(() => {
       loginService.getWxJssdk().then(res => {
         loginService.getWxShare(share, '123123', true, params)

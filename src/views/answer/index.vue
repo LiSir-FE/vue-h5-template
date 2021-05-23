@@ -79,18 +79,18 @@ export default {
   },
   mounted() {
     this.timer = setInterval(this.addTime, 1000)
-    const share = {
-      hasGet: true,
-      title: '123123123',
-      desc: '12312312312',
-      img: require('../../assets/img/logos.png')
-    }
-    const params = {
-      type: 20, typeId: globalVue.userInfo.unionid
-    }
-    loginService.getWxJssdk().then(res => {
-      loginService.getWxShare(share, '123123', true, params)
-    })
+    // const share = {
+    //   hasGet: true,
+    //   title: '123123123',
+    //   desc: '12312312312',
+    //   img: require('../../assets/img/logos.png')
+    // }
+    // const params = {
+    //   type: 20, typeId: globalVue.userInfo.unionid
+    // }
+    // loginService.getWxJssdk().then(res => {
+    //   loginService.getWxShare(share, '123123', true, params)
+    // })
   },
 
   methods: {
@@ -127,7 +127,7 @@ export default {
         }).then(res => {
           clearInterval(this.answerTime)
           console.log(this.answerNum, this.answerTime, res)
-          this.$router.push({ name: 'RankingList' })
+          this.$router.push({ name: 'RankingList', params: {answerNum: this.answerNum, answerTime: this.answerTime} })
         }).catch(err => {
           console.log(err)
         })

@@ -47,7 +47,7 @@ module.exports = {
   lintOnSave: !IS_PROD,
   productionSourceMap: false, // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
   devServer: {
-    port: 9021, // 端口
+    port: 9202, // 端口
     open: false, // 启动后打开浏览器
     disableHostCheck: true,
     overlay: {
@@ -58,7 +58,7 @@ module.exports = {
     proxy: {
       // 配置跨域
       '/api': {
-        target: 'http://wj.ngrok.wjlock.cn',
+        target: 'http://g.wetuc.com',
         // ws: true,
         changOrigin: true, // 开启代理
         secure: true,

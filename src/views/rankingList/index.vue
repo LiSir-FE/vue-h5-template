@@ -12,11 +12,11 @@
       <div class="buttonText">
         <div class="buttonTextLeft">
           <div class="textTop">已答对</div>
-          <div class="textBtn">2/10</div>
+          <div class="textBtn">{{ answerNum }}/10</div>
         </div>
         <div class="buttonTextRight">
           <div class="textTop">已用时</div>
-          <div class="textBtn">123 <span>秒</span> </div>
+          <div class="textBtn">{{ answerTime }} <span>秒</span> </div>
         </div>
       </div>
     </div>
@@ -79,6 +79,8 @@ export default {
   data() {
     return {
       show: !this.$store.state.isShow,
+      answerNum: this.$route.params.answerNum,
+      answerTime: this.$route.params.answerTime,
       logos: require('../../assets/img/logos.png'),
       shares: require('../../assets/img/share.png'),
       main: require('../../assets/img/main.png'),
@@ -134,19 +136,20 @@ export default {
   },
 
   mounted() {
+    this.$store.state.isShow = false;
     this.onLoad()
-    const share = {
-      hasGet: true,
-      title: '123123123',
-      desc: '12312312312',
-      img: require('../../assets/img/logos.png')
-    }
-    const params = {
-      type: 20, typeId: globalVue.userInfo.unionid
-    }
-    loginService.getWxJssdk().then(res => {
-      loginService.getWxShare(share, '123123', true, params)
-    })
+    // const share = {
+    //   hasGet: true,
+    //   title: '123123123',
+    //   desc: '12312312312',
+    //   img: require('../../assets/img/logos.png')
+    // }
+    // const params = {
+    //   type: 20, typeId: globalVue.userInfo.unionid
+    // }
+    // loginService.getWxJssdk().then(res => {
+    //   loginService.getWxShare(share, '123123', true, params)
+    // })
   },
 
   methods: {
