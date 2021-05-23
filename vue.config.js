@@ -58,7 +58,7 @@ module.exports = {
     proxy: {
       // 配置跨域
       '/api': {
-        target: 'http://g.wetuc.com',
+        target: 'http://wj.ngrok.wjlock.cn',
         // ws: true,
         changOrigin: true, // 开启代理
         secure: true,
