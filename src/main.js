@@ -37,7 +37,7 @@ router.beforeEach((to, from, next) => {
   const token = store.state.token
   const appid = 'wx1fb04de739afd114' // wx1fb04de739afd114实际公众号appid，这里的appid对应的微信应用一定是绑定当前h5项目所在线上域名，也就是需要在微信开放平台绑定js安全域名
   const redirect_uri = encodeURIComponent(
-    'http://frp.saqw.cn' + to.fullPath
+    $cdn + to.fullPath
   )
   if (!token) {
     const url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + redirect_uri + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect'
