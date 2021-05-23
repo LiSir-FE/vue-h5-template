@@ -38,11 +38,11 @@
           </div>
           <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
             <div v-for="(item, index) in allList" :key="index" class="wanListP">
-              <p>{{ index + 1 }}</p>
-              <p><van-image round width="1rem" :src="item.headImg" /></p>
-              <p>{{ item. nickName }}</p>
-              <p>{{ item. score }}</p>
-              <p>{{ item. useTime }}</p>
+              <p class="wanListPp">{{ index + 1 }}</p>
+              <p class="wanListPps"><van-image round width="1rem" :src="item.headImg" /></p>
+              <p class="wanListPp">{{ item. nickName }}</p>
+              <p class="wanListPp">{{ item. score }}<span>分</span></p>
+              <p class="wanListPp">{{ item. useTime }}<span>秒</span></p>
             </div>
           </van-list>
         </van-tab>
@@ -154,7 +154,7 @@ export default {
       // 异步更新数据
       // setTimeout 仅做示例，真实场景中一般为 ajax 请求
       setTimeout(() => {
-        // this.getAnswerGameAllUserRanking()
+        this.getAnswerGameAllUserRanking()
         // 加载状态结束
         this.loading = false
 
@@ -242,10 +242,30 @@ export default {
 .wanListP{
   display: flex;
   width: 100%;
+  font-size: 14px;
+  color: #fff;
   p{
     flex: 1;
     text-align: center;
-    color: #1064c2;
+    overflow: hidden;
+    font-size: 14px;
+    span{
+      font-size: 12px;
+    }
+  }
+  .wanListPps{
+    .van-image{
+      border: 2px solid #fff;
+    }
+  }
+  .wanListPp{
+    line-height: 35px;
+  }
+}
+.wanListP:nth-child(-n+3){
+  //font-size: 24px;
+  p{
+    color: #03f9fc
   }
 }
 .warpper {
@@ -333,10 +353,11 @@ export default {
     .listAllTop{
       width: 100%;
       display: flex;
+      background-color: #1064c2;
       p{
         flex: 1;
         text-align: center;
-        color: #1064c2;
+        color: #03f9fc;
       }
     }
   }

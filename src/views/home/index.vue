@@ -57,9 +57,11 @@ export default {
     const params = {
       type: 20, typeId: globalVue.userInfo.unionid
     }
-    loginService.getWxJssdk().then(res => {
-      loginService.getWxShare(share, '123123', true, params)
-    })
+    setTimeout(() => {
+      loginService.getWxJssdk().then(res => {
+        loginService.getWxShare(share, '123123', true, params)
+      })
+    }, 4000);
   },
   watch: {
     '$store.state.isShow': {
@@ -74,16 +76,15 @@ export default {
       this.$router.push({ name: 'RankingList' })
     },
     buttonRght() {
+      let that = this;
       loginService.getAnswerGameCheckCount({ userId: globalVue.userInfo.unionid }).then(res => {
-        console.log(globalVue.answerNums, 'globalVue.answerNums')
-        debugger
-        if (globalVue.answerNums >= res.data.datas) {
-          this.$router.push({ name: 'Answer' })
+        if (Number(that.$store.state.answerNums) >= Number(res.data.datas)) {
+          that.$router.push({ path: '/answer' })
         } else {
           Dialog.confirm({
             message: '答题次数已用完,分享即可获得答题次数!'
           }).then(() => {
-            this.$store.state.isShow = !this.$store.state.isShow
+            that.$store.state.isShow = !that.$store.state.isShow
           }).catch((err) => {
             console.log(err)
           })

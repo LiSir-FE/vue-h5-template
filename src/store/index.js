@@ -9,9 +9,23 @@ const store = new Vuex.Store({
     app
   },
   state: {
-    isShow: false
+    isShow: false,
+    answerNums: '11111'
   },
-  getters
+  mutations: {
+    setToken(state, token) {
+      state.token = token
+      localStorage.token = token
+    }
+  },
+  getters: {
+    getToken(state) {
+      if (!state.token) {
+        state.token = localStorage.getItem('token')
+      }
+      return state.token
+    }
+  }
 })
 
 export default store

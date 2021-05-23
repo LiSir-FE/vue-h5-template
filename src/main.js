@@ -33,11 +33,11 @@ router.beforeEach((to, from, next) => {
     next()
     return
   }
-  const token = globalVue.userInfo.unionid
-  // const token = store.state.user.token
+  // const token = globalVue.userInfo.unionid
+  const token = store.state.token
   const appid = 'wx1fb04de739afd114' // wx1fb04de739afd114实际公众号appid，这里的appid对应的微信应用一定是绑定当前h5项目所在线上域名，也就是需要在微信开放平台绑定js安全域名
   const redirect_uri = encodeURIComponent(
-    'http://frp.saqw.cn' + from.fullPath
+    'http://frp.saqw.cn' + to.fullPath
   )
   if (!token) {
     const url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + redirect_uri + '&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect'
@@ -51,7 +51,19 @@ router.beforeEach((to, from, next) => {
       loginService.getWXByCode({ code: code }).then(res => {
         if (res.data.success) {
           globalVue.userInfo = res.data.datas
-          next({path: '/home'})
+          store.commit('setToken', res.data.datas.unionid);
+          if(to.query.code){ // 带code的页面一定是home/index,所以这里只考虑path 和query, params不考虑,后期如果修改了rediruct_uri,需要注意
+            let query = to.query;
+            delete query.code;
+            delete query.state;
+            next({
+              path: to.path,
+              query
+            });
+          }else{
+            next();
+          }
+
         } else {
           window.location.href = url // 如果请求失败继续走重定 向去获取code这一步
         }

@@ -49,7 +49,8 @@ html, body, #app {
   color: #03f9fc;
 }
 .van-tabs__line{
-  background-color: #03f9fc
+  background-color: #fff;
+  height: 0;
 }
 .van-cell{
   background: none;
@@ -60,4 +61,7 @@ html, body, #app {
 }
 .van-overlay{
   z-index: 999;
+}
+.van-tab--active{
+  background: #1064c2;
 }

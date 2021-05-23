@@ -6,7 +6,7 @@ export const constantRouterMap = [
   {
     path: '/',
     component: () => import('@/views/layouts/index'),
-    redirect: '/codeHome',
+    redirect: '/home',
     meta: {
       title: '首页',
       keepAlive: false
@@ -14,7 +14,7 @@ export const constantRouterMap = [
     children: [
       {
         path: '/codeHome',
-        name: 'Codehome',
+        name: 'codeHome',
         component: () => import('@/views/codeHome/index'),
         meta: { title: 'code', keepAlive: false }
       },
