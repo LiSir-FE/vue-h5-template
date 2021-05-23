@@ -32,6 +32,7 @@
     "babel-plugin-transform-remove-console": "^6.9.4",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "jweixin-module": "^1.6.0",
     "node-sass": "^4.14.1",
     "postcss-pxtorem": "^5.1.1",
     "qs": "^6.10.1",
@@ -42,6 +43,7 @@
     "vue-wechat-title": "^2.0.7",
     "vuex": "^3.6.2",
     "webpack-bundle-analyzer": "^3.8.0",
+    "weixin-js-sdk": "^1.6.0",
     "weixin-jsapi": "^1.1.0"
   }
 }

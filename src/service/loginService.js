@@ -1,8 +1,11 @@
 import axios from 'axios'
 import { tl } from '../mixin/tool'
 import qs from 'qs'
-import wx from 'weixin-jsapi'
+// import wx from 'weixin-js-sdk'
+// import wx from 'weixin-jsapi'
+import wx from 'jweixin-module'
 import globalVue from '@/utils/global'
+import store from '@/store'
 
 axios.defaults.baseURL = 'http://wj.ngrok.wjlock.cn' // https://mini.wetuc.com
 export const loginService = {
@@ -31,24 +34,24 @@ export const loginService = {
   postAnswerGameSaveAnswer: function(params) {
     return axios.post('/answerGame/saveAnswer', qs.stringify(params))
   },
-  // 分享成功
+  /* 分享成功 */
   shares: function (params) {
     return axios.post('/shares' + tl.getParam(params))
   },
   getWxJssdk: function () {
     let url
-    if (typeof localStorage != 'undefined') url = encodeURIComponent(window.location.href)
+    if (typeof localStorage != 'undefined') url = encodeURIComponent(window.location.href.split('#')[0])
     let p = new Promise(function (resolve, reject) {
       axios.get('/wxconfig?url=' + url).then(function (res) {
         let temp = res.data.datas
         wx.config({
-          debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+          debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
           appId: temp.appId, // 必填，公众号的唯一标识
           timestamp: temp.wxTimestamp + '', // 必填，生成签名的时间戳
           nonceStr: temp.wxNoncestr, // 必填，生成签名的随机串
           signature: temp.wxSignature, // 必填，签名，见附录1
           jsApiList: [
-            'checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem',
+            'updateAppMessageShareData', 'updateTimelineShareData', 'checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem',
             'showAllNonBaseMenuItem', 'translateVoice', 'startRecord', 'stopRecord', 'onRecordEnd', 'playVoice', 'pauseVoice', 'stopVoice', 'uploadVoice', 'downloadVoice',
             'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'getNetworkType', 'openLocation', 'getLocation', 'hideOptionMenu', 'showOptionMenu', 'closeWindow',
             'scanQRCode', 'chooseWXPay', 'openProductSpecificView', 'addCard', 'chooseCard', 'openCard'
@@ -58,7 +61,12 @@ export const loginService = {
           resolve(wx)
         })
         wx.checkJsApi({
-          jsApiList: ['onMenuShareAppMessage'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+          jsApiList: [
+            'updateAppMessageShareData', 'updateTimelineShareData', 'checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem',
+            'showAllNonBaseMenuItem', 'translateVoice', 'startRecord', 'stopRecord', 'onRecordEnd', 'playVoice', 'pauseVoice', 'stopVoice', 'uploadVoice', 'downloadVoice',
+            'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'getNetworkType', 'openLocation', 'getLocation', 'hideOptionMenu', 'showOptionMenu', 'closeWindow',
+            'scanQRCode', 'chooseWXPay', 'openProductSpecificView', 'addCard', 'chooseCard', 'openCard'
+          ], // 需要检测的JS接口列表，所有JS接口列表见附录2,
           success: function (res) {
             // 以键值对的形式返回，可用的api值true，不可用为false
             // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
@@ -69,15 +77,16 @@ export const loginService = {
     return p;
   },
   getWxShare: function (params, title, flag, parms) {
-    let that = this
+    const that = this
     // if(typeof localStorage!='undefined' && params) params.url =window.location.href
     // alert(window.location.href)
     if (params.hasGet) {
       let appShare = {
         title: params.title || title,
-        imageUrl: params.imageUrl ? params.imageUrl : 'https://www.wetuc.com/src/assets/image/logo.jpg',
+        // imageUrl: params.imageUrl ? params.imageUrl : 'https://www.wetuc.com/src/assets/image/logo.jpg',
+        imageUrl: '',
         brief: params.brief || '点击查看详情',
-        url: params.url || window.location.href
+        url: params.url || window.location.href.split('#')[0]
       }
       setTimeout(function () {
         that.wxShare(appShare, title, flag, parms)
@@ -94,7 +103,8 @@ export const loginService = {
     * */
         appShare = {
           title: res.data.datas.title || title,
-          imageUrl: res.data.datas.imgUrl ? res.data.datas.imgUrl : 'https://www.wetuc.com/src/assets/image/logo.jpg',
+          // imageUrl: res.data.datas.imgUrl ? res.data.datas.imgUrl : 'https://www.wetuc.com/src/assets/image/logo.jpg',
+          imageUrl: '',
           brief: res.data.datas.desc || '点击查看详情',
           url: res.data.datas.dataUrl || window.location.href
         }
@@ -154,8 +164,8 @@ export const loginService = {
             typeId: parms.typeId
           }).then(res => {
             globalVue.answerNums++
-            globalVue.show = false
-            console.log('res', res, globalVue.answerNums);
+            store.state.isShow = false
+            console.log(store.state.isShow, 'store.state.isShow', globalVue.answerNums, res)
           }).catch(err => {
             console.log('err', err);
           })

@@ -61,7 +61,7 @@
       </van-tabs>
     </div>
 
-    <van-overlay :show="show" @click="show = false">
+    <van-overlay :show="$store.state.isShow" @click="$store.state.isShow = false">
       <div class="container">
         <van-image :src="shares" class="sharImg"/>
         <p>分享至朋友圈,<br>可额外获得1次答题机会!</p>
@@ -78,7 +78,7 @@ export default {
 
   data() {
     return {
-      show: globalVue.show,
+      show: !this.$store.state.isShow,
       logos: require('../../assets/img/logos.png'),
       shares: require('../../assets/img/share.png'),
       main: require('../../assets/img/main.png'),
@@ -101,7 +101,6 @@ export default {
       }, {
         value: '用 时'
       }],
-
       listTop2: [{
         value: '日 期'
       }, {
@@ -116,7 +115,7 @@ export default {
   },
 
   filters: {
-    formatDates: function (value) {
+    formatDates (value) {
       let date = new Date(Number(value));
       let y = date.getFullYear();
       let MM = date.getMonth() + 1;
@@ -155,7 +154,7 @@ export default {
       // 异步更新数据
       // setTimeout 仅做示例，真实场景中一般为 ajax 请求
       setTimeout(() => {
-        this.getAnswerGameAllUserRanking()
+        // this.getAnswerGameAllUserRanking()
         // 加载状态结束
         this.loading = false
 
@@ -183,14 +182,17 @@ export default {
     },
     // 查询我的排名
     getAnswerGameUserRanking() {
-      loginService.getAnswerGameUserRanking().then(res => {
+      loginService.getAnswerGameUserRanking({
+        userId: globalVue.userInfo.unionid
+      }).then(res => {
+        this.allList = res.data.datas
         console.log('我的', res)
       }).catch(err => {
         console.log(err)
       })
     },
     share() {
-      this.show = true
+      this.$store.state.isShow = !this.$store.state.isShow
     },
     again() {
       loginService.getAnswerGameCheckCount({ userId: globalVue.userInfo.unionid }).then(res => {
@@ -200,7 +202,7 @@ export default {
           Dialog.confirm({
             message: '答题次数已用完,分享即可获得答题次数!'
           }).then(() => {
-            this.show = true
+            this.$store.state.isShow = !this.$store.state.isShow
           }).catch((err) => {
             console.log(err)
           })

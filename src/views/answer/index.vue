@@ -37,10 +37,10 @@
        </van-swipe-item>
     </van-swipe>
 
-    <van-overlay :show="show" @click="show = false">
+    <van-overlay :show="$store.state.isShow" @click="$store.state.isShow = false">
       <div class="content">
-        <van-image v-if="ynflag" :src="yes" class="sharImg"/>
-        <van-image v-else :src="no" class="sharImg"/>
+        <van-image v-show="ynflag" :src="yes" class="sharImg"/>
+        <van-image v-show="!ynflag" :src="no" class="sharImg"/>
       </div>
     </van-overlay>
   </div>
@@ -56,7 +56,7 @@ export default {
 
   data() {
     return {
-      show: globalVue.show,
+      show: this.$store.state.isShow,
       ynflag: false,
       logos: require('../../assets/img/logos.png'),
       main: require('../../assets/img/main.png'),
@@ -98,21 +98,26 @@ export default {
       // eslint-disable-next-line eqeqeq
       if (items.value == correct) {
         this.answerNum++
-        this.show = true
-        this.ynflag = true
-        setTimeout(() => {
-          this.show = false
-          this.$refs.vanSwipe.next()
-        }, 200)
+        this.$store.state.isShow = true
+        if(index + 1 < this.answer.length) {
+          this.ynflag = true
+          setTimeout(() => {
+            this.$refs.vanSwipe.next()
+            this.$store.state.isShow = false
+          }, 200)
+        }
       } else {
-        this.show = true
-        setTimeout(() => {
-          this.show = false
+        if(index + 1 < this.answer.length) {
           this.ynflag = false
-          this.$refs.vanSwipe.next()
-        }, 200)
+          this.$store.state.isShow = true
+          setTimeout(() => {
+            this.$store.state.isShow = false
+            this.$refs.vanSwipe.next()
+          }, 200)
+        }
       }
       if (index + 1 >= this.answer.length) {
+        console.log(this.answerNum)
         loginService.postAnswerGameSaveAnswer({
           nickName: globalVue.userInfo.nickname,
           headImg: globalVue.userInfo.headimgurl,
@@ -121,6 +126,7 @@ export default {
           userId: globalVue.userInfo.unionid
         }).then(res => {
           clearInterval(this.answerTime)
+          console.log(this.answerNum, this.answerTime, res)
           this.$router.push({ name: 'RankingList' })
         }).catch(err => {
           console.log(err)

@@ -8,6 +8,9 @@ const store = new Vuex.Store({
   modules: {
     app
   },
+  state: {
+    isShow: false
+  },
   getters
 })
 

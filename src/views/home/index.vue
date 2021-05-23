@@ -18,7 +18,7 @@
         4. 每天有3次挑战机会。做任务可获额外答题机会。
       </div>
     </div>
-    <van-overlay :show="show" @click="show = false">
+    <van-overlay :show="$store.state.isShow" @click="$store.state.isShow = false">
       <div class="container">
         <van-image :src="share" class="sharImg"/>
         <p>分享至朋友圈,<br>可额外获得1次答题机会!</p>
@@ -32,11 +32,12 @@
 import { loginService } from '@/service/loginService'
 import globalVue from '@/utils/global'
 import { Dialog } from 'vant'
+import store from '@/store'
 export default {
 
   data() {
     return {
-      show: globalVue.show,
+      show: this.$store.state.isShow,
       share: require('../../assets/img/share.png'),
       logos: require('../../assets/img/logos.png'),
       main: require('../../assets/img/main.png'),
@@ -44,10 +45,8 @@ export default {
       buttonRight: require('../../assets/img/buttonRight.png')
     }
   },
-
   computed: {
   },
-
   mounted() {
     const share = {
       hasGet: true,
@@ -62,29 +61,29 @@ export default {
       loginService.getWxShare(share, '123123', true, params)
     })
   },
-
-  watch:{
-    'globalVue.show':{ //监听的对象
-      deep:true, //深度监听设置为 true
-      handler:function(newV,oldV){
+  watch: {
+    '$store.state.isShow': {
+      deep: true,
+      handler: function(newV, oldV) {
         console.log('watch中：',newV)
       }
     }
   },
-
   methods: {
     buttonLeft() {
       this.$router.push({ name: 'RankingList' })
     },
     buttonRght() {
       loginService.getAnswerGameCheckCount({ userId: globalVue.userInfo.unionid }).then(res => {
+        console.log(globalVue.answerNums, 'globalVue.answerNums')
+        debugger
         if (globalVue.answerNums >= res.data.datas) {
           this.$router.push({ name: 'Answer' })
         } else {
           Dialog.confirm({
             message: '答题次数已用完,分享即可获得答题次数!'
           }).then(() => {
-            this.show = true
+            this.$store.state.isShow = !this.$store.state.isShow
           }).catch((err) => {
             console.log(err)
           })
