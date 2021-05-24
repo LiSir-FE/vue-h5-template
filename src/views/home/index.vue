@@ -49,21 +49,6 @@ export default {
   computed: {
   },
   mounted() {
-    console.log(store.getters.getUserInfo)
-    const share = {
-      hasGet: true,
-      title: '我是' + store.getters.getUserInfo.nickname + '，邀请您挑战物流知识竞答',
-      desc: '物流知识登顶之战战力通关',
-      // url: window.location.href,
-      // img: 'https://qy.wetuc.com/assets/images/02.jpg',
-      imageUrl: store.getters.getUserInfo.headimgurl
-    }
-    const params = {
-      type: 20, typeId: store.getters.getToken
-    }
-    loginService.getWxJssdk().then(res => {
-      loginService.getWxShare(share, share.title, true, params)
-    })
     this.getAnswerGameCheckCount()
   },
   methods: {
@@ -95,6 +80,22 @@ export default {
         if(res.data.datas == '0') {
           store.commit('setShareNum', 3)
         }
+        that.$nextTick(() => {
+          const share = {
+            hasGet: true,
+            title: '我是' + store.getters.getUserInfo.nickname + '，邀请您挑战物流知识竞答',
+            desc: '物流知识登顶之战战力通关',
+            // url: window.location.href,
+            // img: 'https://qy.wetuc.com/assets/images/02.jpg',
+            imageUrl: store.getters.getUserInfo.headimgurl
+          }
+          const params = {
+            type: 20, typeId: store.getters.getToken
+          }
+          loginService.getWxJssdk().then(res => {
+            loginService.getWxShare(share, share.title, true, params)
+          })
+        })
       }).catch(err => {
         console.log(err)
       })

@@ -144,7 +144,6 @@ export default {
     store.state.isShow = false;
     this.onLoad()
     this.getAnswerGameGetOne()
-
   },
 
   methods: {

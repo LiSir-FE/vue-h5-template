@@ -79,18 +79,20 @@ export default {
   },
   mounted() {
     this.timer = setInterval(this.addTime, 1000)
-    const share = {
-      hasGet: true,
-      title: '我是' + store.getters.getUserInfo.nickname + '，邀请您挑战物流知识竞答',
-      desc: '物流知识登顶之战战力通关',
-      // url: store.getters.getUserInfo.headimgurl,
-      imageUrl: store.getters.getUserInfo.headimgurl
-    }
-    const params = {
-      type: 20, typeId: store.getters.getToken
-    }
-    loginService.getWxJssdk().then(res => {
-      loginService.getWxShare(share, share.title, true, params)
+    this.$nextTick(() => {
+      const share = {
+        hasGet: true,
+        title: '我是' + store.getters.getUserInfo.nickname + '，邀请您挑战物流知识竞答',
+        desc: '物流知识登顶之战战力通关',
+        // url: store.getters.getUserInfo.headimgurl,
+        imageUrl: store.getters.getUserInfo.headimgurl
+      }
+      const params = {
+        type: 20, typeId: store.getters.getToken
+      }
+      loginService.getWxJssdk().then(res => {
+        loginService.getWxShare(share, share.title, true, params)
+      })
     })
   },
 
