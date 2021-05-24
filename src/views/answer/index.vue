@@ -51,6 +51,7 @@
 import answerList from '@/utils/json'
 import { loginService } from '@/service/loginService'
 import store from '@/store'
+import defaultSettings from '@/config'
 
 export default {
 
@@ -84,7 +85,7 @@ export default {
         hasGet: true,
         title: '我是' + JSON.parse(store.getters.getUserInfo).nickname + '，邀请您挑战物流知识竞答',
         desc: '物流知识登顶之战战力通关',
-        // url: store.getters.getUserInfo.headimgurl,
+        url: defaultSettings.baseUrl + '/home',
         imageUrl: JSON.parse(store.getters.getUserInfo).headimgurl
       }
       const params = {

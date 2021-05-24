@@ -74,6 +74,7 @@
 import { loginService } from '@/service/loginService'
 import { Dialog } from 'vant'
 import store from '@/store'
+import defaultSettings from '@/config'
 export default {
 
   data() {
@@ -179,7 +180,7 @@ export default {
             hasGet: true,
             title: '挑战物流知识，我用'+ this.answerTime +'秒通关。你敢来挑战吗？',
             desc: '物流知识登顶之战战力通关',
-            // url: store.getters.getUserInfo.headimgurl,
+            url: defaultSettings.baseUrl + '/home',
             imageUrl: JSON.parse(store.getters.getUserInfo).headimgurl
           }
           const params = {
