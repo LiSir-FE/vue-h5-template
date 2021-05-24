@@ -54,7 +54,8 @@ router.beforeEach((to, from, next) => {
             delete query.code;
             delete query.state;
             next({
-              path: to.path,
+              path: '/home',
+              // path: to.path,
               query
             });
           }else{

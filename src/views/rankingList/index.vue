@@ -143,19 +143,8 @@ export default {
   mounted() {
     store.state.isShow = false;
     this.onLoad()
-    const share = {
-      hasGet: true,
-      title: '挑战物流知识，我用'+ this.answerTime +'秒通关。你敢来挑战吗？',
-      desc: '物流知识登顶之战战力通关',
-      url: store.getters.getUserInfo.headimgurl,
-      img: store.getters.getUserInfo.headimgurl
-    }
-    const params = {
-      type: 20, typeId: store.getters.getToken
-    }
-    loginService.getWxJssdk().then(res => {
-      loginService.getWxShare(share, share.title, true, params)
-    })
+    this.getAnswerGameGetOne()
+
   },
 
   methods: {
@@ -163,7 +152,6 @@ export default {
       // 异步更新数据
       // setTimeout 仅做示例，真实场景中一般为 ajax 请求
       setTimeout(() => {
-        this.getAnswerGameGetOne()
         this.getAnswerGameAllUserRanking()
         // 加载状态结束
         this.loading = false
@@ -185,9 +173,23 @@ export default {
       loginService.getAnswerGameGetOne({
         userId: store.getters.getToken
       }).then(res => {
-        console.log(res)
         this.answerNum = res.data.datas.score / 10
         this.answerTime = res.data.datas.useTime
+        this.$nextTick(() => {
+          const share = {
+            hasGet: true,
+            title: '挑战物流知识，我用'+ this.answerTime +'秒通关。你敢来挑战吗？',
+            desc: '物流知识登顶之战战力通关',
+            url: store.getters.getUserInfo.headimgurl,
+            img: store.getters.getUserInfo.headimgurl
+          }
+          const params = {
+            type: 20, typeId: store.getters.getToken
+          }
+          loginService.getWxJssdk().then(res => {
+            loginService.getWxShare(share, share.title, true, params)
+          })
+        })
       }).catch(err => {
         console.log(err)
       })
