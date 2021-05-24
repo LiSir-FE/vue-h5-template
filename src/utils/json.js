@@ -12,7 +12,7 @@ const answerList = [{
   }],
   correct: 'B'
 }, {
-  title: '运联峰会坚持的的理念是什么？',
+  title: '运联峰会坚持的理念是什么？',
   option: [{
     value: 'A',
     label: '察于未萌，投资未来'
@@ -77,7 +77,7 @@ const answerList = [{
   }],
   correct: 'B'
 }, {
-  title: '（2017年）在运联峰会上，关于大车队概念的讨论，提出大车队“没有规模经济，只有范围经济”的嘉宾是？',
+  title: '在2017年运联峰会上，关于大车队概念的讨论，提出大车队“没有规模经济，只有范围经济”的嘉宾是？',
   option: [{
     value: 'A',
     label: '赵忠善'

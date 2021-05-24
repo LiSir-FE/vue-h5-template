@@ -34,7 +34,7 @@ import { Dialog } from 'vant'
 import store from '@/store'
 import defaultSettings from '@/config'
 export default {
-
+  inject: ['reload'],
   data() {
     return {
       show: store.state.isShow,
