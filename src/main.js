@@ -31,6 +31,7 @@ router.beforeEach((to, from, next) => {
     next()
     return
   }
+  // const token = ''
   const token = store.getters.getToken
   const appid = 'wx1fb04de739afd114' // wx1fb04de739afd114实际公众号appid，这里的appid对应的微信应用一定是绑定当前h5项目所在线上域名，也就是需要在微信开放平台绑定js安全域名
   const redirect_uri = encodeURIComponent(
@@ -49,6 +50,7 @@ router.beforeEach((to, from, next) => {
         if (res.data.success) {
           store.commit('setToken', res.data.datas.unionid ? res.data.datas.unionid : '');
           store.commit('setInfo', JSON.stringify(res.data.datas))
+          // next()
           if(to.query.code){ // 带code的页面一定是home/index,所以这里只考虑path 和query, params不考虑,后期如果修改了rediruct_uri,需要注意
             let query = to.query;
             delete query.code;
@@ -70,7 +72,12 @@ router.beforeEach((to, from, next) => {
       // next();
     }
   } else {
-    next()
+    if(to.path == '/home') {
+      next()
+    } else {
+      next({path: '/home'})
+    }
+    // next()
   }
 })
 

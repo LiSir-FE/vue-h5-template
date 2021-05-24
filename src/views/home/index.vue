@@ -32,6 +32,7 @@
 import { loginService } from '@/service/loginService'
 import { Dialog } from 'vant'
 import store from '@/store'
+import defaultSettings from '@/config'
 export default {
 
   data() {
@@ -85,7 +86,7 @@ export default {
             hasGet: true,
             title: '我是' + JSON.parse(store.getters.getUserInfo).nickname + '，邀请您挑战物流知识竞答',
             desc: '物流知识登顶之战战力通关',
-            // url: defaultSettings.baseUrl + '/home',
+            url: defaultSettings.baseUrl + '/home',
             // img: 'https://qy.wetuc.com/assets/images/02.jpg',
             imageUrl: JSON.parse(store.getters.getUserInfo).headimgurl
           }
