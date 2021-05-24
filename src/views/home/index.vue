@@ -37,7 +37,7 @@ export default {
   data() {
     return {
       show: store.state.isShow,
-      resNums: '',
+      resNums: store.getters.getShareNum,
       userInfo: store.getters.getUserInfo,
       share: require('../../assets/img/share.png'),
       logos: require('../../assets/img/logos.png'),
@@ -90,6 +90,9 @@ export default {
       let that = this;
       loginService.getAnswerGameCheckCount({ userId: store.getters.getToken }).then(res => {
         that.resNums = res.data.datas
+        if(res.data.datas == '0') {
+          store.commit('setShareNum', 3)
+        }
       }).catch(err => {
         console.log(err)
       })
