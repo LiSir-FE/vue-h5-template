@@ -54,12 +54,12 @@ router.beforeEach((to, from, next) => {
             delete query.code;
             delete query.state;
             next({
-              path: '/home',
-              // path: to.path,
+              // path: '/home',
+              path: to.path,
               query
             });
           }else{
-            next({path: '/home'});
+            next();
           }
         } else {
           window.location.href = url // 如果请求失败继续走重定 向去获取code这一步

@@ -64,6 +64,9 @@ export const loginService = {
         wx.ready(function () {
           resolve(wx)
         });
+        // wx.error(function(error){
+        //   alert(JSON.stringify(error) + ";url=" + url);
+        // })
         wx.checkJsApi({
           jsApiList: [
             'updateAppMessageShareData', 'updateTimelineShareData', 'checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem',
