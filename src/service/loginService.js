@@ -5,9 +5,10 @@ import qs from 'qs'
 // import wx from 'weixin-jsapi'
 import wx from 'jweixin-module'
 import globalVue from '@/utils/global'
+import { $cdn } from '@/config'
 import store from '@/store'
 
-axios.defaults.baseURL = 'http://api.tucmedia.com' // https://mini.wetuc.com
+axios.defaults.baseURL = 'http://mini.wetuc.com' // https://mini.wetuc.com
 export const loginService = {
   api: {},
   /* 微信配置 */
@@ -34,6 +35,10 @@ export const loginService = {
   postAnswerGameSaveAnswer: function(params) {
     return axios.post('/answerGame/saveAnswer', qs.stringify(params))
   },
+  /* 查询用时和分数 */
+  getAnswerGameGetOne: function(params) {
+    return axios.get('/answerGame/getOne' + tl.getParam(params))
+  },
   /* 分享成功 */
   shares: function (params) {
     return axios.post('/shares' + tl.getParam(params))
@@ -42,10 +47,10 @@ export const loginService = {
     let url
     if (typeof localStorage != 'undefined') url = encodeURIComponent(window.location.href.split('#')[0])
     let p = new Promise(function (resolve, reject) {
-      axios.get('/wxconfig?url=' + url).then(function (res) {
+      axios.get('/wxGameconfig?url=' + url).then(function (res) {
         let temp = res.data.datas
         wx.config({
-          debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+          debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
           appId: temp.appId, // 必填，公众号的唯一标识
           timestamp: temp.wxTimestamp + '', // 必填，生成签名的时间戳
           nonceStr: temp.wxNoncestr + '', // 必填，生成签名的随机串
@@ -70,18 +75,6 @@ export const loginService = {
           success: function (res) {
             // 以键值对的形式返回，可用的api值true，不可用为false
             // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
-          },
-          error: function(err) {
-            console.log('err',err)
-          },
-          complete: function(complete) {
-            console.log('complete',complete)
-          },
-          cancel: function(cancel) {
-            console.log(cancel)
-          },
-          trigger: function(trigger) {
-            console.log('trigger',trigger)
           }
         });
       })
@@ -95,9 +88,9 @@ export const loginService = {
     if (params.hasGet) {
       let appShare = {
         title: params.title || title,
-        // imageUrl: params.imageUrl ? params.imageUrl : 'https://www.wetuc.com/src/assets/image/logo.jpg',
-        imageUrl: '',
-        brief: params.brief || '点击查看详情',
+        imageUrl: params.imageUrl ? params.imageUrl : 'https://www.wetuc.com/src/assets/image/logo.jpg',
+        // imageUrl: '',
+        brief: params.brief || '物流知识登顶之战力通关',
         url: params.url || window.location.href.split('#')[0]
       }
       setTimeout(function () {
@@ -115,9 +108,9 @@ export const loginService = {
     * */
         appShare = {
           title: res.data.datas.title || title,
-          // imageUrl: res.data.datas.imgUrl ? res.data.datas.imgUrl : 'https://www.wetuc.com/src/assets/image/logo.jpg',
-          imageUrl: '',
-          brief: res.data.datas.desc || '点击查看详情',
+          imageUrl: res.data.datas.imgUrl ? res.data.datas.imgUrl : 'https://www.wetuc.com/src/assets/image/logo.jpg',
+          // imageUrl: '',
+          brief: res.data.datas.desc || '物流知识登顶之战力通关',
           url: res.data.datas.dataUrl || window.location.href
         }
         // console.log('share',res.data.datas);
@@ -146,9 +139,9 @@ export const loginService = {
             type: parms.type,
             typeId: parms.typeId
           }).then(res => {
-            console.log('res', res);
+            // console.log('res', res);
           }).catch(err => {
-            console.log('err', err);
+            // console.log('err', err);
           })
         }
         // 用户确认分享后执行的回调函数
@@ -175,10 +168,8 @@ export const loginService = {
             type: parms.type,
             typeId: parms.typeId
           }).then(res => {
-            globalVue.answerNums++
             store.state.answerNums++
             store.state.isShow = false
-            console.log(store.state.isShow, 'store.state.isShow', globalVue.answerNums, res)
           }).catch(err => {
             console.log('err', err);
           })

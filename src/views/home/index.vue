@@ -38,6 +38,7 @@ export default {
   data() {
     return {
       show: this.$store.state.isShow,
+      userInfo: this.$store.state.userInfo,
       share: require('../../assets/img/share.png'),
       logos: require('../../assets/img/logos.png'),
       main: require('../../assets/img/main.png'),
@@ -50,27 +51,18 @@ export default {
   mounted() {
     const share = {
       hasGet: true,
-      title: '123123123',
-      desc: '12312312312',
-      img: require('../../assets/img/logos.png')
+      title: '我是' + this.$store.state.userInfo.nickname + '，邀请您挑战物流知识竞答',
+      desc: '物流知识登顶之战战力通关',
+      url: this.$store.state.userInfo.headimgurl,
+      img: this.$store.state.userInfo.headimgurl
     }
     const params = {
       type: 20, typeId: store.getters.getToken
     }
-    console.log('paramsparamsparamsparams', params, store)
-    setTimeout(() => {
-      loginService.getWxJssdk().then(res => {
-        loginService.getWxShare(share, '123123', true, params)
-      })
-    }, 4000);
-  },
-  watch: {
-    '$store.state.isShow': {
-      deep: true,
-      handler: function(newV, oldV) {
-        console.log('watch中：',newV)
-      }
-    }
+    loginService.getWxJssdk().then(res => {
+      loginService.getWxShare(share, share.title, true, params)
+    })
+    console.log(this.$store.state.answerNums, 'answerNumsanswerNumsanswerNumsanswerNumsanswerNums')
   },
   methods: {
     buttonLeft() {
@@ -78,8 +70,8 @@ export default {
     },
     buttonRght() {
       let that = this;
-      loginService.getAnswerGameCheckCount({ userId: globalVue.userInfo.unionid }).then(res => {
-        if (Number(that.$store.state.answerNums) >= Number(res.data.datas)) {
+      loginService.getAnswerGameCheckCount({ userId: that.$store.getters.getToken }).then(res => {
+        if (Number(that.$store.state.answerNums) > Number(res.data.datas)) {
           that.$router.push({ path: '/answer' })
         } else {
           Dialog.confirm({

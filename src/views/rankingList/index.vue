@@ -36,7 +36,7 @@
           <div class="listAllTop">
             <p v-for="item in listTop" :key="item.value">{{ item.value }}</p>
           </div>
-          <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+          <van-list v-model="loading" :finished="finished" finished-text='没有更多了' :immediate-check='true' :offset='30' @load='onLoad'>
             <div v-for="(item, index) in allList" :key="index" class="wanListP">
               <p class="wanListPp">{{ index + 1 }}</p>
               <p class="wanListPps"><van-image round width="1rem" :src="item.headImg" /></p>
@@ -74,13 +74,15 @@
 import { loginService } from '@/service/loginService'
 import globalVue from '@/utils/global'
 import { Dialog } from 'vant'
+import store from '@/store'
 export default {
 
   data() {
     return {
+
       show: !this.$store.state.isShow,
-      answerNum: this.$route.params.answerNum,
-      answerTime: this.$route.params.answerTime,
+      answerNum: '',
+      answerTime: '',
       logos: require('../../assets/img/logos.png'),
       shares: require('../../assets/img/share.png'),
       main: require('../../assets/img/main.png'),
@@ -91,7 +93,11 @@ export default {
       allList: [],
       loading: false,
       finished: false,
-
+      page: {
+        pageNum: 1,
+        pageSize: 10
+      },
+      refreshing: false,
       listTop: [{
         value: '排 名'
       }, {
@@ -138,18 +144,19 @@ export default {
   mounted() {
     this.$store.state.isShow = false;
     this.onLoad()
-    // const share = {
-    //   hasGet: true,
-    //   title: '123123123',
-    //   desc: '12312312312',
-    //   img: require('../../assets/img/logos.png')
-    // }
-    // const params = {
-    //   type: 20, typeId: globalVue.userInfo.unionid
-    // }
-    // loginService.getWxJssdk().then(res => {
-    //   loginService.getWxShare(share, '123123', true, params)
-    // })
+    const share = {
+      hasGet: true,
+      title: '挑战物流知识，我用'+ this.answerTime +'秒通关。你敢来挑战吗？',
+      desc: '物流知识登顶之战战力通关',
+      url: this.$store.state.userInfo.headimgurl,
+      img: this.$store.state.userInfo.headimgurl
+    }
+    const params = {
+      type: 20, typeId: store.getters.getToken
+    }
+    loginService.getWxJssdk().then(res => {
+      loginService.getWxShare(share, share.title, true, params)
+    })
   },
 
   methods: {
@@ -157,10 +164,10 @@ export default {
       // 异步更新数据
       // setTimeout 仅做示例，真实场景中一般为 ajax 请求
       setTimeout(() => {
+        this.getAnswerGameGetOne()
         this.getAnswerGameAllUserRanking()
         // 加载状态结束
         this.loading = false
-
         // 数据全部加载完成
         if (this.allList.length >= this.allList.length) {
           this.finished = true
@@ -174,10 +181,21 @@ export default {
         this.getAnswerGameUserRanking()
       }
     },
+    // 查询用时和分数
+    getAnswerGameGetOne() {
+      loginService.getAnswerGameGetOne({
+        userId: this.$store.getters.getToken
+      }).then(res => {
+        console.log(res)
+        this.answerNum = res.data.datas.score / 10
+        this.answerTime = res.data.datas.useTime
+      }).catch(err => {
+        console.log(err)
+      })
+    },
     // 查询全部排名
     getAnswerGameAllUserRanking() {
       loginService.getAnswerGameAllUserRanking().then(res => {
-        console.log('全部', res)
         this.allList = res.data.datas
       }).catch(err => {
         console.log(err)
@@ -198,8 +216,8 @@ export default {
       this.$store.state.isShow = !this.$store.state.isShow
     },
     again() {
-      loginService.getAnswerGameCheckCount({ userId: globalVue.userInfo.unionid }).then(res => {
-        if (Number(that.$store.state.answerNums) >= Number(res.data.datas)) {
+      loginService.getAnswerGameCheckCount({ userId: this.$store.getters.getToken }).then(res => {
+        if (Number(this.$store.state.answerNums) > Number(res.data.datas)) {
           this.$router.push({ name: 'Answer' })
         } else {
           Dialog.confirm({

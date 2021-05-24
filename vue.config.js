@@ -39,8 +39,8 @@ const cdn = {
 }
 
 module.exports = {
-  // publicPath: './', // 署应用包时的基本 URL。 vue-router hash 模式使用
-   publicPath: '/app/', //署应用包时的基本 URL。  vue-router history模式使用
+  publicPath: './', // 署应用包时的基本 URL。 vue-router hash 模式使用
+   // publicPath: '/app/', //署应用包时的基本 URL。  vue-router history模式使用
   //  publicPath: './', //署应用包时的基本 URL。  vue-router history模式使用
   outputDir: 'dist', //  生产环境构建文件的目录
   assetsDir: 'static', //  outputDir的静态资源(js、css、img、fonts)目录
@@ -58,7 +58,7 @@ module.exports = {
     proxy: {
       // 配置跨域
       '/api': {
-        target: 'http://api.tucmedia.com',
+        target: 'http://mini.wetuc.com',
         // ws: true,
         changOrigin: true, // 开启代理
         secure: true,

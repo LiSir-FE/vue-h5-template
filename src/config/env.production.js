@@ -1,10 +1,10 @@
 // // 正式
 module.exports = {
-  baseUrl: 'http://api.tucmedia.com', // 正式项目地址
-  baseApi: 'http://api.tucmedia.com', // 正式api请求地址
+  baseUrl: 'http://g.wetuc.com', // 正式项目地址
+  baseApi: 'http://mini.wetuc.com', // 正式api请求地址
   APPID: 'wx1fb04de739afd114',
   APPSECRET: '4b31380d20a205ec5d73c2b6347feb96',
-  $cdn: 'http://frp.saqw.cn'
+  $cdn: 'http://g.wetuc.com'
 }
 //
 // module.exports = {

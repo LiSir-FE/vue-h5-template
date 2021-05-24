@@ -52,6 +52,7 @@ router.beforeEach((to, from, next) => {
         if (res.data.success) {
           globalVue.userInfo = res.data.datas
           store.commit('setToken', res.data.datas.unionid);
+          store.commit('setInfo', res.data.datas)
           if(to.query.code){ // 带code的页面一定是home/index,所以这里只考虑path 和query, params不考虑,后期如果修改了rediruct_uri,需要注意
             let query = to.query;
             delete query.code;
@@ -63,7 +64,6 @@ router.beforeEach((to, from, next) => {
           }else{
             next();
           }
-
         } else {
           window.location.href = url // 如果请求失败继续走重定 向去获取code这一步
         }

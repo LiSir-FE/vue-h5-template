@@ -10,12 +10,17 @@ const store = new Vuex.Store({
   },
   state: {
     isShow: false,
-    answerNums: '1'
+    answerNums: '1',
+    userInfo: {}
   },
   mutations: {
     setToken(state, token) {
       state.token = token
       localStorage.token = token
+    },
+    setInfo(state, userInfo) {
+      state.userInfo = userInfo
+      localStorage.userInfo = userInfo
     }
   },
   getters: {
@@ -24,6 +29,12 @@ const store = new Vuex.Store({
         state.token = localStorage.getItem('token')
       }
       return state.token
+    },
+    getUserInfo(state) {
+      if(!state.userInfo) {
+        state.userInfo = localStorage.getItem('userInfo')
+      }
+      return state.userInfo
     }
   }
 })

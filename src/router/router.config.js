@@ -13,12 +13,6 @@ export const constantRouterMap = [
     },
     children: [
       {
-        path: '/codeHome',
-        name: 'codeHome',
-        component: () => import('@/views/codeHome/index'),
-        meta: { title: 'code', keepAlive: false }
-      },
-      {
         path: '/layouts',
         name: 'Layouts',
         component: () => import('@/views/layouts/index'),
@@ -42,12 +36,6 @@ export const constantRouterMap = [
         component: () => import('@/views/answer/index'),
         meta: { title: '答题', keepAlive: false }
       },
-      {
-        path: '/wxLogin',
-        name: 'WxLogin',
-        component: () => import('@/views/wxlogin/index'),
-        meta: { title: '微信登录', keepAlive: false }
-      }
     ]
   }
 ]

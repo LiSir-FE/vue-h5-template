@@ -51,6 +51,7 @@
 import globalVue from '@/utils/global'
 import answerList from '@/utils/json'
 import { loginService } from '@/service/loginService'
+import store from '@/store'
 
 export default {
 
@@ -79,18 +80,19 @@ export default {
   },
   mounted() {
     this.timer = setInterval(this.addTime, 1000)
-    // const share = {
-    //   hasGet: true,
-    //   title: '123123123',
-    //   desc: '12312312312',
-    //   img: require('../../assets/img/logos.png')
-    // }
-    // const params = {
-    //   type: 20, typeId: globalVue.userInfo.unionid
-    // }
-    // loginService.getWxJssdk().then(res => {
-    //   loginService.getWxShare(share, '123123', true, params)
-    // })
+    const share = {
+      hasGet: true,
+      title: '我是' + this.$store.state.userInfo.nickname + '，邀请您挑战物流知识竞答',
+      desc: '物流知识登顶之战战力通关',
+      url: this.$store.state.userInfo.headimgurl,
+      img: this.$store.state.userInfo.headimgurl
+    }
+    const params = {
+      type: 20, typeId: store.getters.getToken
+    }
+    loginService.getWxJssdk().then(res => {
+      loginService.getWxShare(share, share.title, true, params)
+    })
   },
 
   methods: {
@@ -123,11 +125,11 @@ export default {
           headImg: globalVue.userInfo.headimgurl,
           score: this.answerNum * 10,
           useTime: this.answerTime,
-          userId: globalVue.userInfo.unionid
+          userId: this.$store.getters.getToken
         }).then(res => {
           clearInterval(this.answerTime)
           console.log(this.answerNum, this.answerTime, res)
-          this.$router.push({ name: 'RankingList', params: {answerNum: this.answerNum, answerTime: this.answerTime} })
+          this.$router.push({ name: 'RankingList' })
         }).catch(err => {
           console.log(err)
         })
