@@ -50,7 +50,7 @@ router.beforeEach((to, from, next) => {
           store.commit('setToken', res.data.datas.unionid ? res.data.datas.unionid : '');
           store.commit('setInfo', res.data.datas)
           if(res.data.datas == '0') {
-            store.commit('setShareNum', 1)
+            store.commit('setShareNum', 3)
           }
           if(to.query.code){ // 带code的页面一定是home/index,所以这里只考虑path 和query, params不考虑,后期如果修改了rediruct_uri,需要注意
             let query = to.query;

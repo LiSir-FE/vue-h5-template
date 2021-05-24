@@ -139,7 +139,7 @@ export const loginService = {
             typeId: parms.typeId
           }).then(res => {
             store.state.isShow = false
-            let shareNum = store.getters.getShareNum + 1
+            let shareNum = Number(store.getters.getShareNum) + 1
             store.commit('setShareNum', Number(shareNum))
           }).catch(err => {
             console.log('err', err);
@@ -170,7 +170,7 @@ export const loginService = {
             typeId: parms.typeId
           }).then(res => {
             store.state.isShow = false
-            let shareNum = store.getters.getShareNum + 1
+            let shareNum = Number(store.getters.getShareNum) + 1
             store.commit('setShareNum', Number(shareNum))
           }).catch(err => {
             console.log('err', err);
