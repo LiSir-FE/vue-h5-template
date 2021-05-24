@@ -49,12 +49,14 @@ export default {
   computed: {
   },
   mounted() {
+    console.log(store.getters.getUserInfo)
     const share = {
       hasGet: true,
       title: '我是' + store.getters.getUserInfo.nickname + '，邀请您挑战物流知识竞答',
       desc: '物流知识登顶之战战力通关',
-      url: store.getters.getUserInfo.headimgurl,
-      img: store.getters.getUserInfo.headimgurl
+      // url: window.location.href,
+      // img: 'https://qy.wetuc.com/assets/images/02.jpg',
+      imageUrl: store.getters.getUserInfo.headimgurl
     }
     const params = {
       type: 20, typeId: store.getters.getToken

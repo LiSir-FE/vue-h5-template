@@ -180,8 +180,8 @@ export default {
             hasGet: true,
             title: '挑战物流知识，我用'+ this.answerTime +'秒通关。你敢来挑战吗？',
             desc: '物流知识登顶之战战力通关',
-            url: store.getters.getUserInfo.headimgurl,
-            img: store.getters.getUserInfo.headimgurl
+            // url: store.getters.getUserInfo.headimgurl,
+            imageUrl: store.getters.getUserInfo.headimgurl
           }
           const params = {
             type: 20, typeId: store.getters.getToken
