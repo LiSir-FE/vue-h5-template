@@ -69,15 +69,9 @@ router.beforeEach((to, from, next) => {
       }).catch(err => {
         console.log('eeeeeeeeeeeeeeeeeeeeee================ ', err)
       })
-      // next();
     }
   } else {
-    if(to.path == '/home') {
-      next()
-    } else {
-      next({path: '/home'})
-    }
-    // next()
+    next()
   }
 })
 

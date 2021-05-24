@@ -12,7 +12,7 @@ const store = new Vuex.Store({
     isShow: false,
     answerNums: '',
     token: '',
-    shareNum: '',
+    shareNum: '3',
     userInfo: ''
   },
   mutations: {
