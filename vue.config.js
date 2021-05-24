@@ -2,7 +2,7 @@
 const path = require('path')
 const defaultSettings = require('./src/config/index.js')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-
+console.log('123123====================================', defaultSettings)
 const resolve = dir => path.join(__dirname, dir)
 // page title
 const name = defaultSettings.title || '运联十周年庆'
@@ -58,7 +58,7 @@ module.exports = {
     proxy: {
       // 配置跨域
       '/api': {
-        target: 'http://mini.wetuc.com',
+        target: 'https://mini.wetuc.com', //https://api.tucmedia.com
         // ws: true,
         changOrigin: true, // 开启代理
         secure: true,

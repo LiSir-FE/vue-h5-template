@@ -4,11 +4,10 @@ import qs from 'qs'
 // import wx from 'weixin-js-sdk'
 // import wx from 'weixin-jsapi'
 import wx from 'jweixin-module'
-import globalVue from '@/utils/global'
 import { $cdn } from '@/config'
 import store from '@/store'
 
-axios.defaults.baseURL = 'http://mini.wetuc.com' // https://mini.wetuc.com
+axios.defaults.baseURL = 'https://mini.wetuc.com' // https://mini.wetuc.com  http://t.tucmedia.com
 export const loginService = {
   api: {},
   /* 微信配置 */
@@ -139,9 +138,11 @@ export const loginService = {
             type: parms.type,
             typeId: parms.typeId
           }).then(res => {
-            // console.log('res', res);
+            store.state.isShow = false
+            let shareNum = store.getters.getShareNum + 1
+            store.commit('setShareNum', Number(shareNum))
           }).catch(err => {
-            // console.log('err', err);
+            console.log('err', err);
           })
         }
         // 用户确认分享后执行的回调函数
@@ -168,8 +169,9 @@ export const loginService = {
             type: parms.type,
             typeId: parms.typeId
           }).then(res => {
-            store.state.answerNums++
             store.state.isShow = false
+            let shareNum = store.getters.getShareNum + 1
+            store.commit('setShareNum', Number(shareNum))
           }).catch(err => {
             console.log('err', err);
           })

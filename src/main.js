@@ -10,12 +10,10 @@ import store from './store'
 import { loginService } from '@/service/loginService'
 // 设置 js中可以访问 $cdn
 import { $cdn } from '@/config'
-import globalVue from '@/utils/global'
 import answerList from '@/utils/json'
 import vueWechatTitle from 'vue-wechat-title'
 import { GetParam } from './utils/getParam.js'
 Vue.prototype.$cdn = $cdn
-Vue.prototype.global = globalVue
 Vue.prototype.answerList = answerList
 Vue.use(vueWechatTitle)
 // 全局引入按需引入UI库 vant
@@ -33,8 +31,7 @@ router.beforeEach((to, from, next) => {
     next()
     return
   }
-  // const token = globalVue.userInfo.unionid
-  const token = store.state.token
+  const token = store.getters.getToken
   const appid = 'wx1fb04de739afd114' // wx1fb04de739afd114实际公众号appid，这里的appid对应的微信应用一定是绑定当前h5项目所在线上域名，也就是需要在微信开放平台绑定js安全域名
   const redirect_uri = encodeURIComponent(
     $cdn + to.fullPath
@@ -50,9 +47,9 @@ router.beforeEach((to, from, next) => {
       // 这里则是根据授权登录后回调到当前h5地址，从当前地址导航栏拿取code,根据实际开发的应用场景，比如向我们项目则是调用一个有后台提供的获取微信个人信息的接口，这个接口是后台根据拿取到的code去请求微信官方文档获取个人信息的接口，下面是我根据我实际业务场景编写的，主要是根据code获取个人信息保存。授权登录走到这一步基本就做完了
       loginService.getWXByCode({ code: code }).then(res => {
         if (res.data.success) {
-          globalVue.userInfo = res.data.datas
-          store.commit('setToken', res.data.datas.unionid);
+          store.commit('setToken', res.data.datas.unionid ? res.data.datas.unionid : '');
           store.commit('setInfo', res.data.datas)
+          store.commit('setShareNum', 1)
           if(to.query.code){ // 带code的页面一定是home/index,所以这里只考虑path 和query, params不考虑,后期如果修改了rediruct_uri,需要注意
             let query = to.query;
             delete query.code;
@@ -67,6 +64,8 @@ router.beforeEach((to, from, next) => {
         } else {
           window.location.href = url // 如果请求失败继续走重定 向去获取code这一步
         }
+      }).catch(err => {
+        console.log('eeeeeeeeeeeeeeeeeeeeee================ ', err)
       })
       // next();
     }

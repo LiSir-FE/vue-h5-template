@@ -48,7 +48,6 @@
 
 <script>
 
-import globalVue from '@/utils/global'
 import answerList from '@/utils/json'
 import { loginService } from '@/service/loginService'
 import store from '@/store'
@@ -57,7 +56,7 @@ export default {
 
   data() {
     return {
-      show: this.$store.state.isShow,
+      show: store.state.isShow,
       ynflag: false,
       logos: require('../../assets/img/logos.png'),
       main: require('../../assets/img/main.png'),
@@ -82,10 +81,10 @@ export default {
     this.timer = setInterval(this.addTime, 1000)
     const share = {
       hasGet: true,
-      title: '我是' + this.$store.state.userInfo.nickname + '，邀请您挑战物流知识竞答',
+      title: '我是' + store.getters.getUserInfo.nickname + '，邀请您挑战物流知识竞答',
       desc: '物流知识登顶之战战力通关',
-      url: this.$store.state.userInfo.headimgurl,
-      img: this.$store.state.userInfo.headimgurl
+      url: store.getters.getUserInfo.headimgurl,
+      img: store.getters.getUserInfo.headimgurl
     }
     const params = {
       type: 20, typeId: store.getters.getToken
@@ -100,20 +99,20 @@ export default {
       // eslint-disable-next-line eqeqeq
       if (items.value == correct) {
         this.answerNum++
-        this.$store.state.isShow = true
+        store.state.isShow = true
         if(index + 1 < this.answer.length) {
           this.ynflag = true
           setTimeout(() => {
             this.$refs.vanSwipe.next()
-            this.$store.state.isShow = false
+            store.state.isShow = false
           }, 200)
         }
       } else {
         if(index + 1 < this.answer.length) {
           this.ynflag = false
-          this.$store.state.isShow = true
+          store.state.isShow = true
           setTimeout(() => {
-            this.$store.state.isShow = false
+            store.state.isShow = false
             this.$refs.vanSwipe.next()
           }, 200)
         }
@@ -121,11 +120,11 @@ export default {
       if (index + 1 >= this.answer.length) {
         console.log(this.answerNum)
         loginService.postAnswerGameSaveAnswer({
-          nickName: globalVue.userInfo.nickname,
-          headImg: globalVue.userInfo.headimgurl,
+          nickName: store.getters.getUserInfo.nickname,
+          headImg: store.getters.getUserInfo.headimgurl,
           score: this.answerNum * 10,
           useTime: this.answerTime,
-          userId: this.$store.getters.getToken
+          userId: store.getters.getToken
         }).then(res => {
           clearInterval(this.answerTime)
           console.log(this.answerNum, this.answerTime, res)

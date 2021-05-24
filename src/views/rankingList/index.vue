@@ -72,7 +72,6 @@
 
 <script>
 import { loginService } from '@/service/loginService'
-import globalVue from '@/utils/global'
 import { Dialog } from 'vant'
 import store from '@/store'
 export default {
@@ -80,7 +79,7 @@ export default {
   data() {
     return {
 
-      show: !this.$store.state.isShow,
+      show: !store.state.isShow,
       answerNum: '',
       answerTime: '',
       logos: require('../../assets/img/logos.png'),
@@ -142,14 +141,14 @@ export default {
   },
 
   mounted() {
-    this.$store.state.isShow = false;
+    store.state.isShow = false;
     this.onLoad()
     const share = {
       hasGet: true,
       title: '挑战物流知识，我用'+ this.answerTime +'秒通关。你敢来挑战吗？',
       desc: '物流知识登顶之战战力通关',
-      url: this.$store.state.userInfo.headimgurl,
-      img: this.$store.state.userInfo.headimgurl
+      url: store.getters.getUserInfo.headimgurl,
+      img: store.getters.getUserInfo.headimgurl
     }
     const params = {
       type: 20, typeId: store.getters.getToken
@@ -184,7 +183,7 @@ export default {
     // 查询用时和分数
     getAnswerGameGetOne() {
       loginService.getAnswerGameGetOne({
-        userId: this.$store.getters.getToken
+        userId: store.getters.getToken
       }).then(res => {
         console.log(res)
         this.answerNum = res.data.datas.score / 10
@@ -204,7 +203,7 @@ export default {
     // 查询我的排名
     getAnswerGameUserRanking() {
       loginService.getAnswerGameUserRanking({
-        userId: globalVue.userInfo.unionid
+        userId: store.getters.getToken
       }).then(res => {
         this.allList = res.data.datas
         console.log('我的', res)
@@ -213,17 +212,17 @@ export default {
       })
     },
     share() {
-      this.$store.state.isShow = !this.$store.state.isShow
+      store.state.isShow = !store.state.isShow
     },
     again() {
-      loginService.getAnswerGameCheckCount({ userId: this.$store.getters.getToken }).then(res => {
-        if (Number(this.$store.state.answerNums) > Number(res.data.datas)) {
+      loginService.getAnswerGameCheckCount({ userId: store.getters.getToken }).then(res => {
+        if (Number(store.getters.getShareNum) > Number(res.data.datas)) {
           this.$router.push({ name: 'Answer' })
         } else {
           Dialog.confirm({
             message: '答题次数已用完,分享即可获得答题次数!'
           }).then(() => {
-            this.$store.state.isShow = !this.$store.state.isShow
+            store.state.isShow = !store.state.isShow
           }).catch((err) => {
             console.log(err)
           })

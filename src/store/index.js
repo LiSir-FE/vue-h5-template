@@ -10,7 +10,9 @@ const store = new Vuex.Store({
   },
   state: {
     isShow: false,
-    answerNums: '1',
+    answerNums: '',
+    token: '',
+    shareNum: '',
     userInfo: {}
   },
   mutations: {
@@ -21,6 +23,10 @@ const store = new Vuex.Store({
     setInfo(state, userInfo) {
       state.userInfo = userInfo
       localStorage.userInfo = userInfo
+    },
+    setShareNum(state, shareNum) {
+      state.shareNum = shareNum
+      localStorage.shareNum = shareNum
     }
   },
   getters: {
@@ -35,6 +41,12 @@ const store = new Vuex.Store({
         state.userInfo = localStorage.getItem('userInfo')
       }
       return state.userInfo
+    },
+    getShareNum(state) {
+      if (!state.shareNum) {
+        state.shareNum = localStorage.getItem('shareNum')
+      }
+      return state.shareNum
     }
   }
 })

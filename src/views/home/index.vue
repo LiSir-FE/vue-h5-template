@@ -30,15 +30,15 @@
 
 <script>
 import { loginService } from '@/service/loginService'
-import globalVue from '@/utils/global'
 import { Dialog } from 'vant'
 import store from '@/store'
 export default {
 
   data() {
     return {
-      show: this.$store.state.isShow,
-      userInfo: this.$store.state.userInfo,
+      show: store.state.isShow,
+      resNums: '',
+      userInfo: store.getters.getUserInfo,
       share: require('../../assets/img/share.png'),
       logos: require('../../assets/img/logos.png'),
       main: require('../../assets/img/main.png'),
@@ -51,10 +51,10 @@ export default {
   mounted() {
     const share = {
       hasGet: true,
-      title: '我是' + this.$store.state.userInfo.nickname + '，邀请您挑战物流知识竞答',
+      title: '我是' + store.getters.getUserInfo.nickname + '，邀请您挑战物流知识竞答',
       desc: '物流知识登顶之战战力通关',
-      url: this.$store.state.userInfo.headimgurl,
-      img: this.$store.state.userInfo.headimgurl
+      url: store.getters.getUserInfo.headimgurl,
+      img: store.getters.getUserInfo.headimgurl
     }
     const params = {
       type: 20, typeId: store.getters.getToken
@@ -62,26 +62,34 @@ export default {
     loginService.getWxJssdk().then(res => {
       loginService.getWxShare(share, share.title, true, params)
     })
-    console.log(this.$store.state.answerNums, 'answerNumsanswerNumsanswerNumsanswerNumsanswerNums')
+    this.getAnswerGameCheckCount()
   },
   methods: {
     buttonLeft() {
       this.$router.push({ name: 'RankingList' })
     },
     buttonRght() {
-      let that = this;
-      loginService.getAnswerGameCheckCount({ userId: that.$store.getters.getToken }).then(res => {
-        if (Number(that.$store.state.answerNums) > Number(res.data.datas)) {
+      let that = this
+      loginService.getAnswerGameCheckCount({ userId: store.getters.getToken }).then(res => {
+        if (Number(store.getters.getShareNum) > Number(res.data.datas)) {
           that.$router.push({ path: '/answer' })
         } else {
           Dialog.confirm({
             message: '答题次数已用完,分享即可获得答题次数!'
           }).then(() => {
-            that.$store.state.isShow = !that.$store.state.isShow
+            store.state.isShow = !store.state.isShow
           }).catch((err) => {
             console.log(err)
           })
         }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    getAnswerGameCheckCount() {
+      let that = this;
+      loginService.getAnswerGameCheckCount({ userId: store.getters.getToken }).then(res => {
+        that.resNums = res.data.datas
       }).catch(err => {
         console.log(err)
       })
