@@ -82,10 +82,10 @@ export default {
     this.$nextTick(() => {
       const share = {
         hasGet: true,
-        title: '我是' + store.getters.getUserInfo.nickname + '，邀请您挑战物流知识竞答',
+        title: '我是' + JSON.parse(store.getters.getUserInfo).nickname + '，邀请您挑战物流知识竞答',
         desc: '物流知识登顶之战战力通关',
         // url: store.getters.getUserInfo.headimgurl,
-        imageUrl: store.getters.getUserInfo.headimgurl
+        imageUrl: JSON.parse(store.getters.getUserInfo).headimgurl
       }
       const params = {
         type: 20, typeId: store.getters.getToken
@@ -122,8 +122,8 @@ export default {
       if (index + 1 >= this.answer.length) {
         console.log(this.answerNum)
         loginService.postAnswerGameSaveAnswer({
-          nickName: store.getters.getUserInfo.nickname,
-          headImg: store.getters.getUserInfo.headimgurl,
+          nickName: JSON.parse(store.getters.getUserInfo).nickname,
+          headImg: JSON.parse(store.getters.getUserInfo).headimgurl,
           score: this.answerNum * 10,
           useTime: this.answerTime,
           userId: store.getters.getToken

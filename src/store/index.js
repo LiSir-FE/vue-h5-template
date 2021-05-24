@@ -13,7 +13,7 @@ const store = new Vuex.Store({
     answerNums: '',
     token: '',
     shareNum: '',
-    userInfo: {}
+    userInfo: ''
   },
   mutations: {
     setToken(state, token) {

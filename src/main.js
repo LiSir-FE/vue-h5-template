@@ -48,7 +48,7 @@ router.beforeEach((to, from, next) => {
       loginService.getWXByCode({ code: code }).then(res => {
         if (res.data.success) {
           store.commit('setToken', res.data.datas.unionid ? res.data.datas.unionid : '');
-          store.commit('setInfo', res.data.datas)
+          store.commit('setInfo', JSON.stringify(res.data.datas))
           if(to.query.code){ // 带code的页面一定是home/index,所以这里只考虑path 和query, params不考虑,后期如果修改了rediruct_uri,需要注意
             let query = to.query;
             delete query.code;
