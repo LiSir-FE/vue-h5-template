@@ -104,11 +104,11 @@ export default {
       refreshing: false,
       page: {
         pageNum: 1,
-        pageSize: 5
+        pageSize: 20
       },
       pages: {
         pageNum: 1,
-        pageSize: 5
+        pageSize: 20
       },
       listTop: [{
         value: '排 名'
