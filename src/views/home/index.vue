@@ -86,6 +86,7 @@ export default {
             hasGet: true,
             title: '我是' + JSON.parse(store.getters.getUserInfo).nickname + '，邀请您挑战物流知识竞答',
             desc: '物流知识登顶之战',
+            brief: '物流知识登顶之战',
             url: defaultSettings.baseUrl + '/home',
             // img: 'https://qy.wetuc.com/assets/images/02.jpg',
             imageUrl: JSON.parse(store.getters.getUserInfo).headimgurl

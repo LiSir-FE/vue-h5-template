@@ -92,7 +92,7 @@ export const loginService = {
         title: params.title || title,
         imageUrl: params.imageUrl ? params.imageUrl : 'https://www.wetuc.com/src/assets/image/logo.jpg',
         // imageUrl: '',
-        brief: params.brief || '物流知识登顶之战力通关',
+        brief: params.brief || '物流知识登顶之战',
         url: params.url || window.location.href.split('#')[0]
       }
       setTimeout(function () {
@@ -112,7 +112,7 @@ export const loginService = {
           title: res.data.datas.title || title,
           imageUrl: res.data.datas.imgUrl ? res.data.datas.imgUrl : 'https://www.wetuc.com/src/assets/image/logo.jpg',
           // imageUrl: '',
-          brief: res.data.datas.desc || '物流知识登顶之战力通关',
+          brief: res.data.datas.desc || '物流知识登顶之战',
           url: res.data.datas.dataUrl || window.location.href
         }
         // console.log('share',res.data.datas);
