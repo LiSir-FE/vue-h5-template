@@ -30,11 +30,6 @@ export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
 }
-async function isIos(){
-  const u = await navigator.userAgent;
-  return u.indexOf("iPhone") > -1 || u.indexOf("Mac OS") > -1;
-}
-// location.reload()
 router.beforeEach((to, from, next) => {
   // if (!window.initUrl) {
   //   window.initUrl = location.href.split('#')[0]

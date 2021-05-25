@@ -146,6 +146,15 @@ export default {
     this.onLoad()
     this.getAnswerGameGetOne()
   },
+  watch: {
+    $route: {
+      deep: true,
+      immediate: true,
+      handler(value, oldvalue) {
+        console.log('val=========================', value, oldvalue)
+      }
+    }
+  },
 
   methods: {
     onLoad() {
