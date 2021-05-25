@@ -33,30 +33,37 @@
     <div class="listBtn">
       <van-tabs v-model="active" @change="activeChange">
         <van-tab title="排行榜">
-          <div class="listAllTop">
+          <div class="listAllTop listAllTops">
             <p v-for="item in listTop" :key="item.value">{{ item.value }}</p>
           </div>
-          <van-list v-model="loading" :finished="finished" finished-text='没有更多了' :immediate-check='true' :offset='30' @load='onLoad'>
-            <div v-for="(item, index) in allList" :key="index" class="wanListP">
-              <p class="wanListPp">{{ index + 1 }}</p>
-              <p class="wanListPps"><van-image round width="1rem" :src="item.headImg" /></p>
-              <p class="wanListPp">{{ item. nickName }}</p>
-              <p class="wanListPp">{{ item. score }}<span>分</span></p>
-              <p class="wanListPp">{{ item. useTime }}<span>秒</span></p>
-            </div>
-          </van-list>
+          <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+            <van-list v-model="loading" :finished="finished" finished-text='没有更多了' @load="onLoad" :immediate-check='true' :offset='30'>
+              <div v-for="(item, index) in allList" :key="index" class="wanListP">
+                <p class="wanListPp">{{ index + 1 }}</p>
+                <p class="wanListPps"><van-image round width="1rem" :src="item.headImg" /></p>
+                <p class="wanListPp wanListPpsss">{{ item. nickName }}</p>
+                <p class="wanListPp">{{ item. score }}<span>分</span></p>
+                <p class="wanListPp">{{ item. useTime }}<span>秒</span></p>
+              </div>
+            </van-list>
+          </van-pull-refresh>
+
+
         </van-tab>
         <van-tab title="我的战绩">
           <div class="listAllTop">
             <p v-for="item in listTop2" :key="item.value">{{ item.value }}</p>
           </div>
-          <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-            <div v-for="(item, index) in allList" :key="index" class="wanListP">
-              <p class="wanListPp">{{ (item.createTime) | formatDates }}</p>
-              <p class="wanListPp">{{ item. score }}<span>分</span></p>
-              <p class="wanListPp">{{ item. useTime }}<span>秒</span></p>
-            </div>
-          </van-list>
+          <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+            <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" :immediate-check='true' :offset='30'>
+              <div v-for="(item, index) in allLists" :key="index" class="wanListP">
+                <p class="wanListPp">{{ (item.createTime) | formatDates }}</p>
+                <p class="wanListPp">{{ item. score }}<span>分</span></p>
+                <p class="wanListPp">{{ item. useTime }}<span>秒</span></p>
+              </div>
+            </van-list>
+          </van-pull-refresh>
+
         </van-tab>
       </van-tabs>
     </div>
@@ -64,7 +71,7 @@
     <van-overlay :show="$store.state.isShow" @click="$store.state.isShow = false">
       <div class="container">
         <van-image :src="shares" class="sharImg"/>
-        <p>分享至朋友圈,<br>可额外获得1次答题机会!</p>
+        <p>分享至朋友或朋友圈,<br>可额外获得1次答题机会!</p>
       </div>
     </van-overlay>
   </div>
@@ -83,21 +90,26 @@ export default {
       show: !store.state.isShow,
       answerNum: '',
       answerTime: '',
-      logos: require('../../assets/img/logos.png'),
-      shares: require('../../assets/img/share.png'),
-      main: require('../../assets/img/main.png'),
-      border: require('../../assets/img/border.png'),
-      buttonLft: require('../../assets/img/addChance.png'),
-      buttonRight: require('../../assets/img/again.png'),
+      logos: 'https://resource.wetuc.com/g/img/logos.png', //require('../../assets/img/logos.png'),
+      shares: 'https://resource.wetuc.com/g/img/share.png', //require('../../assets/img/share.png'),
+      main: 'https://resource.wetuc.com/g/img/main.png', //require('../../assets/img/main.png'),
+      border: 'https://resource.wetuc.com/g/img/border.png', //require('../../assets/img/border.png'),
+      buttonLft: 'https://resource.wetuc.com/g/img/addChance.png', //require('../../assets/img/addChance.png'),
+      buttonRight: 'https://resource.wetuc.com/g/img/again.png', //require('../../assets/img/again.png'),
       active: 0,
       allList: [],
+      allLists: [],
       loading: false,
       finished: false,
+      refreshing: false,
       page: {
         pageNum: 1,
-        pageSize: 10
+        pageSize: 5
       },
-      refreshing: false,
+      pages: {
+        pageNum: 1,
+        pageSize: 5
+      },
       listTop: [{
         value: '排 名'
       }, {
@@ -143,7 +155,6 @@ export default {
 
   mounted() {
     store.state.isShow = false;
-    this.onLoad()
     this.getAnswerGameGetOne()
   },
   watch: {
@@ -161,21 +172,39 @@ export default {
       // 异步更新数据
       // setTimeout 仅做示例，真实场景中一般为 ajax 请求
       setTimeout(() => {
-        this.getAnswerGameAllUserRanking()
-        // 加载状态结束
-        this.loading = false
-        // 数据全部加载完成
-        if (this.allList.length >= this.allList.length) {
-          this.finished = true
+        if (this.refreshing) {
+          this.allList = [];
+          this.allLists = [];
+          this.refreshing = false;
         }
-      }, 200)
+        if(this.active == 0) {
+          this.getAnswerGameAllUserRanking()
+        } else {
+          this.getAnswerGameUserRanking()
+        }
+        // 加载状态结束
+        this.loading = true
+      }, 500)
+    },
+    onRefresh() {
+      // 清空列表数据
+      this.finished = false;
+      this.allList = [];
+      this.allLists = [];
+      this.page.pageNum= 1
+      this.pages.pageNum= 1
+      // 重新加载数据
+      // 将 loading 设置为 true，表示处于加载状态
+      this.loading = true;
+      this.onLoad();
     },
     activeChange(item) {
-      if (item == 0) {
-        this.getAnswerGameAllUserRanking()
-      } else {
-        this.getAnswerGameUserRanking()
-      }
+      // if (item == 0) {
+      //   this.getAnswerGameAllUserRanking()
+      // } else {
+      //   this.getAnswerGameUserRanking()
+      // }
+      this.onRefresh()
     },
     // 查询用时和分数
     getAnswerGameGetOne() {
@@ -205,19 +234,34 @@ export default {
     },
     // 查询全部排名
     getAnswerGameAllUserRanking() {
-      loginService.getAnswerGameAllUserRanking().then(res => {
-        this.allList = res.data.datas
+      loginService.getAnswerGameAllUserRanking({
+        pageNo: this.page.pageNum,
+        pageSize: this.page.pageSize
+      }).then(res => {
+        this.loading = false;
+        this.allList = this.allList.concat(res.data.datas.datas)
+        this.page.pageNum++
+        if(this.page.pageNum > res.data.datas.totalPage) {
+          this.finished = true
+        }
       }).catch(err => {
         console.log(err)
       })
     },
     // 查询我的排名
     getAnswerGameUserRanking() {
+      this.allList = []
       loginService.getAnswerGameUserRanking({
-        userId: store.getters.getToken
+        userId: store.getters.getToken,
+        pageNo: this.pages.pageNum,
+        pageSize: this.pages.pageSize
       }).then(res => {
-        this.allList = res.data.datas
-        console.log('我的', res)
+        this.loading = false;
+        this.allLists = this.allLists.concat(res.data.datas.datas)
+        this.pages.pageNum++
+        if(this.pages.pageNum > res.data.datas.totalPage) {
+          this.finished = true
+        }
       }).catch(err => {
         console.log(err)
       })
@@ -273,16 +317,22 @@ export default {
 .wanListP{
   display: flex;
   width: 100%;
-  font-size: 14px;
+  font-size: 12px;
   color: #fff;
   p{
     flex: 1;
     text-align: center;
     overflow: hidden;
-    font-size: 16px;
+    font-size: 12px;
     span{
-      font-size: 12px;
+      font-size: 10px;
     }
+  }
+  .wanListPpsss{
+    flex-grow: 3;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
   }
   .wanListPps{
     .van-image{
@@ -389,6 +439,11 @@ export default {
         flex: 1;
         text-align: center;
         color: #03f9fc;
+      }
+    };
+    .listAllTops{
+      p:nth-child(3) {
+        flex-grow: 3;
       }
     }
   }

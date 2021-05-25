@@ -59,13 +59,13 @@ export default {
     return {
       show: store.state.isShow,
       ynflag: false,
-      logos: require('../../assets/img/logos.png'),
-      main: require('../../assets/img/main.png'),
-      border: require('../../assets/img/border.png'),
-      buttonLft: require('../../assets/img/addChance.png'),
-      buttonRight: require('../../assets/img/again.png'),
-      yes: require('../../assets/img/yes.png'),
-      no: require('../../assets/img/no.png'),
+      logos: 'https://resource.wetuc.com/g/img/logos.png', //require('../../assets/img/logos.png'),
+      main: 'https://resource.wetuc.com/g/img/main.png', //require('../../assets/img/main.png'),
+      border: 'https://resource.wetuc.com/g/img/border.png', //require('../../assets/img/border.png'),
+      buttonLft: 'https://resource.wetuc.com/g/img/addChance.png', //require('../../assets/img/addChance.png'),
+      buttonRight: 'https://resource.wetuc.com/g/img/again.png', //require('../../assets/img/again.png'),
+      yes: 'https://resource.wetuc.com/g/img/yes.png', //require('../../assets/img/yes.png'),
+      no: 'https://resource.wetuc.com/g/img/no.png', //require('../../assets/img/no.png'),
       answerNum: 0, // 答对数量
       answerTime: 0, // 答对时间
       timer: '',

@@ -21,7 +21,7 @@
     <van-overlay :show="$store.state.isShow" @click="$store.state.isShow = false">
       <div class="container">
         <van-image :src="share" class="sharImg"/>
-        <p>分享至朋友圈,<br>可额外获得1次答题机会!</p>
+        <p>分享至朋友或朋友圈,<br>可额外获得1次答题机会!</p>
       </div>
     </van-overlay>
   </div>
@@ -40,11 +40,11 @@ export default {
       show: store.state.isShow,
       resNums: store.getters.getShareNum,
       userInfo: JSON.parse(store.getters.getUserInfo),
-      share: require('../../assets/img/share.png'),
-      logos: require('../../assets/img/logos.png'),
-      main: require('../../assets/img/main.png'),
-      buttonLft: require('../../assets/img/buttonLeft.png'),
-      buttonRight: require('../../assets/img/buttonRight.png')
+      share: 'https://resource.wetuc.com/g/img/share.png', // require('../../assets/img/share.png'),
+      logos: 'https://resource.wetuc.com/g/img/logos.png', //require('../../assets/img/logos.png'),
+      main: 'https://resource.wetuc.com/g/img/main.png', //require('../../assets/img/main.png'),
+      buttonLft: 'https://resource.wetuc.com/g/img/buttonLeft.png', //require('../../assets/img/buttonLeft.png'),
+      buttonRight: 'https://resource.wetuc.com/g/img/buttonRight.png', //require('../../assets/img/buttonRight.png')
     }
   },
   computed: {
