@@ -84,7 +84,7 @@ export default {
       const share = {
         hasGet: true,
         title: '我是' + JSON.parse(store.getters.getUserInfo).nickname + '，邀请您挑战物流知识竞答',
-        desc: '物流知识登顶之战战力通关',
+        desc: '物流知识登顶之战',
         url: defaultSettings.baseUrl + '/home',
         imageUrl: JSON.parse(store.getters.getUserInfo).headimgurl
       }

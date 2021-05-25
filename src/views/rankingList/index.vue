@@ -217,7 +217,7 @@ export default {
           const share = {
             hasGet: true,
             title: '挑战物流知识，我用'+ this.answerTime +'秒通关。你敢来挑战吗？',
-            desc: '物流知识登顶之战战力通关',
+            desc: '物流知识登顶之战',
             url: defaultSettings.baseUrl + '/home',
             imageUrl: JSON.parse(store.getters.getUserInfo).headimgurl
           }
