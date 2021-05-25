@@ -7,7 +7,7 @@ import wx from 'jweixin-module'
 import { $cdn } from '@/config'
 import store from '@/store'
 
-axios.defaults.baseURL = 'http://t.tucmedia.com' // https://mini.wetuc.com  http://t.tucmedia.com
+axios.defaults.baseURL = 'http://api.tucmedia.com' // https://mini.wetuc.com  http://api.tucmedia.com
 export const loginService = {
   api: {},
   /* 微信配置 */
