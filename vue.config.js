@@ -58,7 +58,7 @@ module.exports = {
     proxy: {
       // 配置跨域
       '/api': {
-        target: 'https://t.tucmedia.com', //https://api.tucmedia.com t.tucmedia.com
+        target: 'http://t.tucmedia.com', //https://api.tucmedia.com t.tucmedia.com
         // ws: true,
         changOrigin: true, // 开启代理
         secure: true,
