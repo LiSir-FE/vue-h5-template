@@ -52,9 +52,9 @@
           </div>
           <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
             <div v-for="(item, index) in allList" :key="index" class="wanListP">
-              <p>{{ (item.createTime) | formatDates }}</p>
-              <p>{{ item. score }}</p>
-              <p>{{ item. useTime }}</p>
+              <p class="wanListPp">{{ (item.createTime) | formatDates }}</p>
+              <p class="wanListPp">{{ item. score }}<span>分</span></p>
+              <p class="wanListPp">{{ item. useTime }}<span>秒</span></p>
             </div>
           </van-list>
         </van-tab>
@@ -279,7 +279,7 @@ export default {
     flex: 1;
     text-align: center;
     overflow: hidden;
-    font-size: 14px;
+    font-size: 16px;
     span{
       font-size: 12px;
     }
