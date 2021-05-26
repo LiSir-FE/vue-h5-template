@@ -1,5 +1,9 @@
 <template>
   <div id="app">
+<!--    <div class="containt">-->
+<!--      <van-image class="background" width="100%" height="100%" src="https://resource.wetuc.com/g/img/background.png"/>-->
+<!--      -->
+<!--    </div>-->
     <div class="audio" @click="changeOn" :class="isOff ? 'isOff' : 'isOn'">
       <audio :src="mus" class="media-audio" loop autoplay ref="MusicPlay" id="audio"></audio>
     </div>
@@ -58,6 +62,16 @@ export default {
 
 </script>
 <style lang="scss">
+//.containt{
+//  width: 100%;
+//  height: 100%;
+//  position: relative;
+//}
+//.background{
+//  position: fixed;
+//  top: 0;
+//  left: 0;
+//}
 .isOn{
   width: 28px;
   height: 28px;

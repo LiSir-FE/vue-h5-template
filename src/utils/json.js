@@ -51,18 +51,18 @@ const answerList = [{
   }],
   correct: 'C'
 }, {
-  title: '以下零担快运企业 CEO中，没有在运联峰会上台演讲过的是？',
+  title: '哪一年的运联峰会有「黄浦江游宴」环节？',
   option: [{
     value: 'A',
-    label: '秦兴华'
+    label: '2012'
   }, {
     value: 'B',
-    label: '杨兴运'
+    label: '2015'
   }, {
     value: 'C',
-    label: '周韶宁'
+    label: '2017'
   }],
-  correct: 'B'
+  correct: 'A'
 }, {
   title: '2018 年运联峰会上宣布完成对志鸿物流合并重组的企业家是？',
   option: [{

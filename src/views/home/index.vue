@@ -78,13 +78,16 @@ export default {
       let that = this;
       loginService.getAnswerGameCheckCount({ userId: store.getters.getToken }).then(res => {
         that.resNums = res.data.datas
-        if(res.data.datas == '0') {
+        if(res.data.datas <= 3) {
           store.commit('setShareNum', 3)
+        }
+        if(res.data.datas > 3) {
+          store.commit('setShareNum', res.data.datas)
         }
         that.$nextTick(() => {
           const share = {
             hasGet: true,
-            title: '我是' + JSON.parse(store.getters.getUserInfo).nickname + '，邀请您挑战物流知识竞答',
+            title: '我是' + JSON.parse(store.getters.getUserInfo).nickname + '，邀请您参加物流知识登顶之战',
             desc: '物流知识登顶之战',
             brief: '物流知识登顶之战',
             url: defaultSettings.baseUrl + '/home',

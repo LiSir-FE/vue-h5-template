@@ -2,40 +2,39 @@
 const path = require('path')
 const defaultSettings = require('./src/config/index.js')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-console.log('123123====================================', defaultSettings)
 const resolve = dir => path.join(__dirname, dir)
 // page title
 const name = defaultSettings.title || '运联十周年庆'
 // 生产环境，测试和正式
 const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV)
 // externals
-// const externals = {
-//   vue: 'Vue',
-//   'vue-router': 'VueRouter',
-//   vuex: 'Vuex',
-//   vant: 'vant',
-//   axios: 'axios'
-// }
+const externals = {
+  vue: 'Vue',
+  'vue-router': 'VueRouter',
+  vuex: 'Vuex',
+  vant: 'vant',
+  axios: 'axios'
+}
 // CDN外链，会插入到index.html中
 const cdn = {
   // 开发环境
   dev: {
     css: [],
     js: [
-      'https://res.wx.qq.com/open/js/jweixin-1.6.0.js'
+      'https://s9.cnzz.com/z_stat.php?id=1279955349&web_id=1279955349'
     ]
   },
   // 生产环境
-  // build: {
-  //   css: ['https://cdn.jsdelivr.net/npm/vant@2.4.7/lib/index.css'],
-  //   js: [
-  //     'https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js',
-  //     'https://cdn.jsdelivr.net/npm/vue-router@3.1.5/dist/vue-router.min.js',
-  //     'https://cdn.jsdelivr.net/npm/axios@0.19.2/dist/axios.min.js',
-  //     'https://cdn.jsdelivr.net/npm/vuex@3.1.2/dist/vuex.min.js',
-  //     'https://cdn.jsdelivr.net/npm/vant@2.4.7/lib/index.min.js'
-  //   ]
-  // }
+  build: {
+    // css: ['https://cdn.jsdelivr.net/npm/vant@2.4.7/lib/index.css'],
+    js: [
+      'https://s9.cnzz.com/z_stat.php?id=1279955349&web_id=1279955349'
+      // 'https://cdn.jsdelivr.net/npm/vue-router@3.1.5/dist/vue-router.min.js',
+      // 'https://cdn.jsdelivr.net/npm/axios@0.19.2/dist/axios.min.js',
+      // 'https://cdn.jsdelivr.net/npm/vuex@3.1.2/dist/vuex.min.js',
+      // 'https://cdn.jsdelivr.net/npm/vant@2.4.7/lib/index.min.js'
+    ]
+  }
 }
 
 module.exports = {
@@ -44,7 +43,7 @@ module.exports = {
   //  publicPath: './', //署应用包时的基本 URL。  vue-router history模式使用
   outputDir: 'dist', //  生产环境构建文件的目录
   assetsDir: 'static', //  outputDir的静态资源(js、css、img、fonts)目录
-  lintOnSave: !IS_PROD,
+  lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false, // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
   devServer: {
     port: 9202, // 端口
@@ -87,10 +86,16 @@ module.exports = {
     config.name = name
 
     // 为生产环境修改配置...
-    // if (IS_PROD) {
-    //   // externals
-    //   config.externals = externals
-    // }
+    if (process.env.NODE_ENV === 'production') {
+      // externals里的模块不打包
+      Object.assign(config, {
+        name: name,
+        externals: externals
+      })
+      // 为开发环境修改配置...
+      // if (process.env.NODE_ENV === 'development') {
+      // }
+    }
   },
 
   chainWebpack: config => {
@@ -108,14 +113,15 @@ module.exports = {
     /**
      * 添加CDN参数到htmlWebpackPlugin配置中
      */
-    // config.plugin('html').tap(args => {
-    //   if (IS_PROD) {
-    //     args[0].cdn = cdn.build
-    //   } else {
-    //     args[0].cdn = cdn.dev
-    //   }
-    //   return args
-    //  })
+    config.plugin('html').tap(args => {
+      if (process.env.NODE_ENV === 'production') {
+        args[0].cdn = cdn.build
+      }
+      if (process.env.NODE_ENV === 'development') {
+        args[0].cdn = cdn.dev
+      }
+      return args
+     })
 
     /**
      * 设置保留空格
@@ -141,9 +147,9 @@ module.exports = {
     }
     config
       // https://webpack.js.org/configuration/devtool/#development
-      .when(!IS_PROD, config => config.devtool('cheap-source-map'))
+      .when(process.env.NODE_ENV === 'development', config => config.devtool('cheap-source-map'))
 
-    config.when(IS_PROD, config => {
+    config.when(process.env.NODE_ENV !== 'development', config => {
       config
         .plugin('ScriptExtHtmlWebpackPlugin')
         .after('html')

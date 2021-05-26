@@ -13,9 +13,11 @@ import defaultSettings, { $cdn } from '@/config'
 import answerList from '@/utils/json'
 import vueWechatTitle from 'vue-wechat-title'
 import { GetParam } from './utils/getParam.js'
+import animate from 'animate.css'
 Vue.prototype.$cdn = $cdn
 Vue.prototype.answerList = answerList
 Vue.use(vueWechatTitle)
+Vue.use(animate)
 // 全局引入按需引入UI库 vant
 import '@/plugins/vant'
 // 引入全局样式
