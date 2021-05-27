@@ -101,10 +101,24 @@ export default {
   methods: {
     optionsClick(items, index, correct) {
       // eslint-disable-next-line eqeqeq
-      if (items.value == correct) {
+      if(items.value == correct) {
         this.answerNum++
         store.state.isShow = true
-        if(index + 1 < this.answer.length) {
+        if(index + 1 >= this.answer.length) {
+          loginService.postAnswerGameSaveAnswer({
+            nickName: JSON.parse(store.getters.getUserInfo).nickname,
+            headImg: JSON.parse(store.getters.getUserInfo).headimgurl,
+            score: this.answerNum * 10,
+            useTime: this.answerTime,
+            userId: store.getters.getToken
+          }).then(res => {
+            clearInterval(this.answerTime)
+            console.log(this.answerNum, this.answerTime, res)
+            this.$router.push({ name: 'RankingList' })
+          }).catch(err => {
+            console.log(err)
+          })
+        } else {
           this.ynflag = true
           setTimeout(() => {
             this.$refs.vanSwipe.next()
@@ -112,31 +126,14 @@ export default {
           }, 200)
         }
       } else {
-        if(index + 1 < this.answer.length) {
-          this.ynflag = false
-          store.state.isShow = true
-          setTimeout(() => {
-            store.state.isShow = false
-            this.$refs.vanSwipe.next()
-          }, 200)
-        }
+        this.ynflag = false
+        store.state.isShow = true
+        setTimeout(() => {
+          this.$refs.vanSwipe.next()
+          store.state.isShow = false
+        }, 200)
       }
-      if (index + 1 >= this.answer.length) {
-        console.log(this.answerNum)
-        loginService.postAnswerGameSaveAnswer({
-          nickName: JSON.parse(store.getters.getUserInfo).nickname,
-          headImg: JSON.parse(store.getters.getUserInfo).headimgurl,
-          score: this.answerNum * 10,
-          useTime: this.answerTime,
-          userId: store.getters.getToken
-        }).then(res => {
-          clearInterval(this.answerTime)
-          console.log(this.answerNum, this.answerTime, res)
-          this.$router.push({ name: 'RankingList' })
-        }).catch(err => {
-          console.log(err)
-        })
-      }
+
     },
     addTime() {
       this.answerTime++

@@ -26,13 +26,15 @@ const cdn = {
   },
   // 生产环境
   build: {
-    // css: ['https://cdn.jsdelivr.net/npm/vant@2.4.7/lib/index.css'],
+    css: ['https://cdn.jsdelivr.net/npm/vant@beta/lib/index.css'],
     js: [
+      'https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.6/vue-router.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/vuex/3.1.1/vuex.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js',
+      'https://cdn.jsdelivr.net/npm/vant@beta/lib/vant.min.js',
       'https://s9.cnzz.com/z_stat.php?id=1279955349&web_id=1279955349'
-      // 'https://cdn.jsdelivr.net/npm/vue-router@3.1.5/dist/vue-router.min.js',
-      // 'https://cdn.jsdelivr.net/npm/axios@0.19.2/dist/axios.min.js',
-      // 'https://cdn.jsdelivr.net/npm/vuex@3.1.2/dist/vuex.min.js',
-      // 'https://cdn.jsdelivr.net/npm/vant@2.4.7/lib/index.min.js'
     ]
   }
 }
