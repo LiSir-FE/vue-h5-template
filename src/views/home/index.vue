@@ -42,7 +42,8 @@ export default {
       userInfo: JSON.parse(store.getters.getUserInfo),
       share: 'https://resource.wetuc.com/g/img/share.png', // require('../../assets/img/share.png'),
       logos: 'https://resource.wetuc.com/g/img/logos.png', //require('../../assets/img/logos.png'),
-      main: 'https://resource.wetuc.com/g/img/main.png', //require('../../assets/img/main.png'),
+      // main: 'https://resource.wetuc.com/g/img/main.png', //require('../../assets/img/main.png'),
+      main: 'https://resource.wetuc.com/g/img/carloadLogos.png', //require('../../assets/img/main.png'),
       buttonLft: 'https://resource.wetuc.com/g/img/buttonLeft.png', //require('../../assets/img/buttonLeft.png'),
       buttonRight: 'https://resource.wetuc.com/g/img/buttonRight.png', //require('../../assets/img/buttonRight.png')
     }
