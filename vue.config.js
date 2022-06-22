@@ -26,7 +26,7 @@ const cdn = {
   },
   // 生产环境
   build: {
-    css: ['https://cdn.jsdelivr.net/npm/vant@beta/lib/index.css'],
+    css: ['https://resource.wetuc.com/static/css/vant-index.css'],
     js: [
       'https://resource.wetuc.com/static/js/vue_2.6.10.min.js',
       'https://resource.wetuc.com/static/js/vue-router_3.0.6.min.js',
