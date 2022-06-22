@@ -28,12 +28,12 @@ const cdn = {
   build: {
     css: ['https://cdn.jsdelivr.net/npm/vant@beta/lib/index.css'],
     js: [
-      'https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.6/vue-router.min.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/vuex/3.1.1/vuex.min.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js',
-      'https://cdn.jsdelivr.net/npm/vant@beta/lib/vant.min.js',
+      'https://resource.wetuc.com/static/js/vue_2.6.10.min.js',
+      'https://resource.wetuc.com/static/js/vue-router_3.0.6.min.js',
+      'https://resource.wetuc.com/static/js/axios_0.18.0.min.js',
+      'https://resource.wetuc.com/static/js/vuex_3.1.1.min.js',
+      'https://resource.wetuc.com/static/js/crypto-js_3.1.9.min.js',
+      'https://resource.wetuc.com/static/js/vant.min.js',
       'https://s9.cnzz.com/z_stat.php?id=1279955349&web_id=1279955349'
     ]
   }
